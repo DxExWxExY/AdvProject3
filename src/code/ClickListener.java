@@ -1,3 +1,5 @@
+package code;
+
 public interface ClickListener {
     /**
      * Callback to notify clicking of a square.

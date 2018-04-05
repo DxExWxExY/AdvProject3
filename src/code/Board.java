@@ -1,3 +1,4 @@
+package code;
 /** An abstraction of the Sudoku puzzle.
  * */
 public class Board {

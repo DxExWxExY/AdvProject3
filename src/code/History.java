@@ -1,3 +1,5 @@
+package code;
+
 /** Class used to implement undo's and redo's.
  * */
 public class History {

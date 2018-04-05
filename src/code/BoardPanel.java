@@ -1,3 +1,5 @@
+package code;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -16,7 +18,7 @@ import sun.audio.AudioStream;
  * @author Yoonsik Cheon
  */
 @SuppressWarnings("serial")
-public class BoardPanel extends JPanel {
+public class BoardPanel extends JPanel{
 
     /**
      * Background color of the board.
