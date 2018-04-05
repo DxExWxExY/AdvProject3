@@ -34,8 +34,9 @@ public class BoardPanel extends JPanel{
      * Width and height of a square in pixels and other useful variables.
      */
     private int squareSize;
-    public int sx, sy;
-    public boolean highlightSqr, invalid, reset, win;
+    private boolean win;
+    int sx, sy;
+    boolean highlightSqr, invalid, reset;
 
     /**
      * Create a new board panel to display the given board.
@@ -58,7 +59,7 @@ public class BoardPanel extends JPanel{
      * @param board Receives an object of type Board.
      * @see Board
      */
-    public void setBoard(Board board) {
+    void setBoard(Board board) {
 //        System.out.println("setBoard");
         this.board = board;
     }
