@@ -1,4 +1,3 @@
-package sudoku.dialog;
 
 import java.applet.AudioClip;
 import java.awt.BorderLayout;
@@ -16,7 +15,6 @@ import javax.sound.sampled.DataLine;
 import javax.swing.*;
 import  sun.audio.*;    //import the sun.audio package
 import  java.io.*;
-import sudoku.model.Board;
 
 /**
  * A dialog template for playing simple Sudoku games.
