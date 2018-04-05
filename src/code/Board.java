@@ -189,3 +189,5 @@ public class Board {
         valid = new boolean[size][size];
     }
 }
+
+//puto el qe lo lea xD
