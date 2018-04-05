@@ -6,7 +6,7 @@ public class Board {
     private final int size;
     private int[][] board;
     private boolean[][] valid;
-    private boolean[][] mutable; // FIXME: 4/3/2018 impelemet mutuability for initial
+    private boolean[][] mutable;
 
     /** Create a new board of the given size.
      * @param size This will be the size of the board. */
@@ -170,6 +170,14 @@ public class Board {
             }
         }
         return true;
+    }
+
+    /**
+     * This method returns whether an element in the board is mutable.
+     * @return Boolean determining if it can be mutable.
+     * */
+    public boolean isMutable(int row, int col) {
+        return mutable[row][col];
     }
 
     /**
