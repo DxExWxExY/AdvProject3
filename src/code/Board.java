@@ -190,4 +190,4 @@ public class Board {
     }
 }
 
-//puto el qe lo lea xD
+//puto el qe lo lea xD y su mama tambien
