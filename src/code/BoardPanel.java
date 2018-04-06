@@ -33,8 +33,8 @@ public class BoardPanel extends JPanel{
     /**
      * Width and height of a square in pixels and other useful variables.
      */
-    private int squareSize;
-    private boolean win;
+    private int squareSize, hx, hy;
+    private boolean win, hover;
     int sx, sy;
     boolean highlightSqr, invalid, reset;
 
@@ -42,14 +42,52 @@ public class BoardPanel extends JPanel{
      * Create a new board panel to display the given board.
      */
     BoardPanel(Board board, ClickListener listener) {
-//        System.out.println("BoardPanel");
         this.board = board;
+        addMouseMotionListener(new MouseAdapter() {
+            /**
+             * {@inheritDoc}
+             *
+             * @param e
+             * @since 1.6
+             */
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                System.out.println(hx + " " + hy);
+                if (hover) {
+                    int xy = locateSquare(e.getX(), e.getY());
+                    hx = xy/100;
+                    hy = xy%100;
+                    repaint();
+                }
+            }
+        });
         addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 int xy = locateSquare(e.getX(), e.getY());
                 if (xy >= 0) {
                     listener.clicked(xy / 100, xy % 100);
                 }
+            }
+
+            /**
+             * {@inheritDoc}
+             *
+             * @param e
+             */
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                hover = true;
+            }
+
+            /**
+             * {@inheritDoc}
+             *
+             * @param e
+             */
+            @Override
+            public void mouseExited(MouseEvent e) {
+                hover = false;
             }
         });
     }
@@ -71,7 +109,6 @@ public class BoardPanel extends JPanel{
      * where x and y are 0-based column/row indexes.
      */
     private int locateSquare(int x, int y) {
-//        System.out.println("locateSquare");
         if (x < 0 || x > board.size() * squareSize
                 || y < 0 || y > board.size() * squareSize) {
             return -1;
@@ -97,6 +134,7 @@ public class BoardPanel extends JPanel{
         // WRITE YOUR CODE HERE ...
         playSound();
         highlightInvalid(g);
+        highlightHovered(g);
         drawNumbers(g);
         highlightSelected(g);
         insideLines(g);
@@ -234,11 +272,21 @@ public class BoardPanel extends JPanel{
     * @param g method receives the Graphics class in order to draw the actions
     * */
     private void highlightSelected(Graphics g) {
-//        System.out.println("actions");
         if (highlightSqr) {
             g.setColor(Color.cyan);
             g.fillRect(sx*squareSize, sy*squareSize, squareSize, squareSize);
-            highlightSqr = false;
         }
     }
+
+    /**
+     * This method highlights the hovered cell in the board.
+     * @param g method receives the Graphics class in order to draw the actions.
+     * */
+    private void highlightHovered(Graphics g) {
+        if (hover) {
+            g.setColor(Color.YELLOW);
+            g.fillRect(hx*squareSize, hy*squareSize, squareSize, squareSize);
+        }
+    }
+
 }

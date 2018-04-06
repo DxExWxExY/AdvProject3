@@ -91,6 +91,7 @@ public class SudokuDialog extends JFrame {
             boardPanel.invalid = !board.isValid(boardPanel.sy, boardPanel.sx);
             showMessage(String.format("Inserted Number %d", number));
         }
+        boardPanel.highlightSqr = false;
         boardPanel.repaint();
     }
 
