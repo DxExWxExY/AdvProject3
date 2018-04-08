@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.Objects;
 
@@ -58,6 +59,28 @@ public class SudokuDialog extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
         //setResizable(false);
+
+// Panel Settings
+        JMenu menu;
+        JMenuItem i1, i2;
+        JMenuBar mb=new JMenuBar();
+        setJMenuBar(mb);
+        menu=new JMenu("Menu");
+
+        i1=new JMenuItem("New Game");
+        i2=new JMenuItem("Exit");
+        menu.add(i1); menu.add(i2);
+        mb.add(menu);
+        setJMenuBar(mb);
+        setLayout(null);
+        setVisible(true);
+
+//toolBar settings
+        JToolBar tb = new JToolBar();
+        JButton undo = new JButton("Undo");
+        tb.add(undo);
+        add(tb,BorderLayout.NORTH);
+        tb.setVisible(true);
     }
 
     /**
@@ -181,6 +204,7 @@ public class SudokuDialog extends JFrame {
     }
 
     public static void main(String[] args) {
-        new SudokuDialog();
+
+       new SudokuDialog();
     }
 }
