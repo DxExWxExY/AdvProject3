@@ -1,4 +1,7 @@
 package code;
+
+import java.util.Random;
+
 /** An abstraction of the Sudoku puzzle.
  * */
 public class Board {
@@ -35,12 +38,21 @@ public class Board {
      * This method generates a board preset.
      * */
     public void generateBoard() {
-        if (size == 4) {
-            for (int i = 0; i < size; i++) {
-                for (int j = 0; j < size; j++) {
-
+        Random random = new Random(size);
+        int limI = 0, limJ = 0;
+        while (!isSolved()) {
+            if (limI % Math.sqrt(size) == 0) {
+                limJ++;
+                limI = 0;
+            }
+            for (int i = limI; i < (limI*Math.sqrt(size)); i++) {
+                for (int j = 0; j < (limJ*Math.sqrt(size)); j++) {
+                    if (ruleChecker(i,j, random.nextInt())) {
+                        setElement(i,j,random.nextInt());
+                    }
                 }
             }
+            if (checkSubGrid((limI*Math.sqrt(size)),(limJ*Math.sqrt(size)), )
         }
     }
 
@@ -127,6 +139,29 @@ public class Board {
      * @return Returns if the number follows the rule.
      * */
     private boolean checkSubGrid(int row, int col, int num) {
+        /*the starting position is determined by modding the
+         * row/col num by the sqrt of the size*/
+        int rowS = (int) Math.sqrt(size) * (int) Math.floor(Math.abs(row/Math.sqrt(size)));
+        int colS = (int) Math.sqrt(size) * (int) Math.floor(Math.abs(col/Math.sqrt(size)));
+        int rowE = (int) (rowS + (Math.sqrt(size)));
+        int colE = (int) (colS + (Math.sqrt(size)));
+        for (int i = rowS; i < rowE; i++) {
+            for (int j = colS; j < colE; j++) {
+                if (board[i][j] == num) {
+                    return false; //if a matching number is found
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * This performs the sub-grid rule check of sudoku.
+     * @param row This is the row which will be checked.
+     * @param col This is the column which will be checked.
+     * @return Returns if the number follows the rule.
+     * */
+    private boolean checkSubGrid(int row, int col) {
         /*the starting position is determined by modding the
          * row/col num by the sqrt of the size*/
         int rowS = (int) Math.sqrt(size) * (int) Math.floor(Math.abs(row/Math.sqrt(size)));
