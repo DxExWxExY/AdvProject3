@@ -1,4 +1,7 @@
 package code;
+
+import java.util.Random;
+
 /** An abstraction of the Sudoku puzzle.
  * */
 public class Board {
@@ -15,7 +18,7 @@ public class Board {
         this.size = size;
         this.board = new int[size][size];
         this.valid = new boolean[size][size];
-        this.mutable = new boolean[size][size];
+        this.valid = new boolean[size][size];
     }
 
     /** This method clones the current board.
@@ -46,10 +49,8 @@ public class Board {
                     mutable[i][j]=true;
 
                 }
-
             }
         }
-
     }
 
     /**
