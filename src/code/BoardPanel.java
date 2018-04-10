@@ -31,7 +31,7 @@ public class BoardPanel extends JPanel{
     private Board board;
 
     /**
-     * Width and height of a square in pixels and other useful variables.
+     * Width and height of a square in pixels and other flags variables.
      */
     private int squareSize, hx, hy;
     private boolean win, hover;
@@ -52,7 +52,6 @@ public class BoardPanel extends JPanel{
              */
             @Override
             public void mouseMoved(MouseEvent e) {
-                System.out.println(hx + " " + hy);
                 if (hover) {
                     int xy = locateSquare(e.getX(), e.getY());
                     hx = xy/100;
