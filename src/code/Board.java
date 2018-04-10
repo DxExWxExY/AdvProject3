@@ -18,15 +18,6 @@ public class Board {
         this.valid = new boolean[size][size];
     }
 
-    /** Special constructor used to clone instances of a Board object.
-     * */
-    Board(int size, int[][] board, boolean[][] valid, boolean[][] mutable) {
-        this.size = size;
-        this.board = board.clone();
-        this.valid = valid.clone();
-        this.mutable = mutable.clone();
-    }
-
     /** This method clones the current board.
      * @return Returns a copy of a board object.
      * */
@@ -38,6 +29,19 @@ public class Board {
      * @return Returns the size of the board*/
     int size() {
         return size;
+    }
+
+    /**
+     * This method generates a board preset.
+     * */
+    public void generateBoard() {
+        if (size == 4) {
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+
+                }
+            }
+        }
     }
 
     /**
