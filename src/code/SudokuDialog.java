@@ -83,6 +83,16 @@ public class SudokuDialog extends JFrame {
         tb.add(undo);
         add(tb,BorderLayout.NORTH);
         tb.setVisible(true);
+
+        board.generateBoard();
+        board.print();
+        System.out.println();
+        while (!board.isSolved()) {
+            board.generateBoard();
+        }
+        board.print();
+
+
     }
 
     /**

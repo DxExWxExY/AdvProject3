@@ -1,5 +1,7 @@
 package code;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Random;
 
 /** An abstraction of the Sudoku puzzle.
@@ -37,19 +39,61 @@ public class Board {
     /**
      * This method generates a board preset.
      * */
-    void generateBoard() {
-
+    public void generateBoard() {
         Random rand = new Random();
-        for (int i = 0; i <size ; i++) {
-            for (int j = 0; j <size ; j++) {
-                int  n = rand.nextInt(size) + 1;
-                while (ruleChecker(i,j,n))  {
-                    board[i][j] = n;
-                    valid[i][j] = true;
-                    mutable[i][j]=true;
+//        for (int i = 0; i <size ; i++) {
+//            for (int j = 0; j <size ; j++) {
+        for (int e = 0; e < 30; e++) {
+            int  n = rand.nextInt(size);
+            int  i = rand.nextInt(size);
+            int  j = rand.nextInt(size);
 
+            if (ruleChecker(i,j,n)) {
+                board[i][j] = n;
+                valid[i][j] = true;
+                mutable[i][j] = true;
+            }
+
+        }
+//            }
+//        }
+        solveSudoku();
+
+    }
+
+
+        public boolean solveSudoku(){
+        {
+            for(int row=0;row<size;row++)
+            {
+                for(int col=0;col<size;col++)
+                {
+                    if(board[row][col]==0)
+                    {
+                        System.out.println("unassigned");
+                        for(int number=1;number<=size;number++)
+                        {
+                            if(ruleChecker(row, col, number))
+                            {
+                                board[row][col] = number;
+                                valid[row][col] = true;
+                                System.out.println("-------------------");
+                                if(solveSudoku())
+                                {
+                                    return true;
+                                }
+                                else
+                                {
+                                    board[row][col] = 0;
+                                    valid[row][col] = false;
+                                }
+                            }
+                        }
+                        return false;
+                    }
                 }
             }
+            return true;
         }
     }
 
