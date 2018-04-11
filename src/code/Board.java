@@ -21,15 +21,6 @@ public class Board {
         this.valid = new boolean[size][size];
     }
 
-    /** Special constructor used to clone instances of a Board object.
-     * */
-    Board(int size, int[][] board, boolean[][] valid, boolean[][] mutable) {
-        this.size = size;
-        this.board = board.clone();
-        this.valid = valid.clone();
-        this.mutable = mutable.clone();
-    }
-
     /** This method clones the current board.
      * @return Returns a copy of a board object.
      * */
@@ -46,7 +37,7 @@ public class Board {
     /**
      * This method generates a board preset.
      * */
-    public void generateBoard() {
+    void generateBoard() {
 
         Random rand = new Random();
         for (int i = 0; i <size ; i++) {
@@ -61,28 +52,6 @@ public class Board {
             }
         }
     }
-
-    /**
-     * This method generates a board preset.
-     * */
-    /*public void generateBoard() {
-        Random random = new Random(size);
-        int limI = 0, limJ = 0;
-        while (!isSolved()) {
-            if (limI % Math.sqrt(size) == 0) {
-                limJ++;
-                limI = 0;
-            }
-            for (int i = limI; i < (limI*Math.sqrt(size)); i++) {
-                for (int j = 0; j < (limJ*Math.sqrt(size)); j++) {
-                    if (ruleChecker(i,j, random.nextInt())) {
-                        setElement(i,j,random.nextInt());
-                    }
-                }
-            }
-            if (checkSubGrid((limI*Math.sqrt(size)),(limJ*Math.sqrt(size)), )
-        }
-    }*/
 
     /**
      * This method receives a coordinate in the matrix and checks if it is allowed.
@@ -221,7 +190,7 @@ public class Board {
      * This method returns whether an element in the board is mutable.
      * @return Boolean determining if it can be mutable.
      * */
-    public boolean isMutable(int row, int col) {
+    boolean isMutable(int row, int col) {
         return !mutable[row][col];
     }
 
