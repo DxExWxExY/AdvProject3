@@ -65,7 +65,7 @@ public class Board {
     /**
      * This method generates a board preset.
      * */
-    public void generateBoard() {
+    /*public void generateBoard() {
         Random random = new Random(size);
         int limI = 0, limJ = 0;
         while (!isSolved()) {
@@ -82,7 +82,7 @@ public class Board {
             }
             if (checkSubGrid((limI*Math.sqrt(size)),(limJ*Math.sqrt(size)), )
         }
-    }
+    }*/
 
     /**
      * This method receives a coordinate in the matrix and checks if it is allowed.
