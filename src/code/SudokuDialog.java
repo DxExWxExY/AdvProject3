@@ -41,7 +41,7 @@ public class SudokuDialog extends JFrame {
     /**
      * Create a new dialog.
      */
-    SudokuDialog() {
+    private SudokuDialog() {
         this(DEFAULT_SIZE);
     }
 
