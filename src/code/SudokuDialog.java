@@ -74,6 +74,7 @@ public class SudokuDialog extends JFrame {
 
         i2.addActionListener(e -> System.exit(0));
 
+
         /***************************/
 
 //toolBar settings

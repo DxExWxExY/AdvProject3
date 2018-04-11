@@ -38,6 +38,7 @@ public class BoardPanel extends JPanel{
     int sx, sy;
     boolean highlightSqr, invalid, reset;
 
+
     /**
      * Create a new board panel to display the given board.
      */
