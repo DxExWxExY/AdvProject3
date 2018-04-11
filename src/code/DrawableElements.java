@@ -1,151 +1,25 @@
 package code;
 
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.InputStream;
-import javax.swing.*;
-
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
-/**
- * A special panel class to display a Sudoku board modeled by the
- * {@link Board} class. You need to write code for
- * the paint() method.
- *
- * @author Yoonsik Cheon
- * @see Board
- */
-@SuppressWarnings("serial")
-public class BoardPanel extends JPanel {
+import javax.swing.*;
+import java.awt.*;
+import java.io.InputStream;
 
-    /**
-     * Background color of the board.
-     */
-    private static Color boardColor = new Color(70, 70, 70);
+public class DrawableElements extends BoardPanel {
 
-
-    /**
-     * Width and height of a square in pixels and other flags variables and
-     * the Board to be displayed.
-     */
-
-    Board board;
-    int squareSize, hx, hy, sx, sy;
-    boolean highlightSqr, invalid, reset, win, hover;
-
-
-    /**
-     * Create a new board panel to display the given board.
-     */
-    BoardPanel(Board board, ClickListener listener) {
-//        System.out.println("BoardPanel");
-        this.board = board;
-        addMouseMotionListener(new MouseAdapter() {
-            /**
-             * {@inheritDoc}
-             *
-             * @param e
-             * @since 1.6
-             */
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                if (hover) {
-                    int xy = locateSquare(e.getX(), e.getY());
-                    hx = xy / 100;
-                    hy = xy % 100;
-                    repaint();
-                }
-            }
-        });
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int xy = locateSquare(e.getX(), e.getY());
-                if (xy >= 0) {
-                    listener.clicked(xy / 100, xy % 100);
-                }
-            }
-
-            /**
-             * {@inheritDoc}
-             *
-             * @param e
-             */
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                hover = true;
-            }
-
-            /**
-             * {@inheritDoc}
-             *
-             * @param e
-             */
-            @Override
-            public void mouseExited(MouseEvent e) {
-                hover = false;
-            }
-        });
-    }
-
-    BoardPanel() {
-    }
-
-    /**
-     * Set the board to be displayed.
-     *
-     * @param board Receives an object of type Board.
-     * @see Board
-     */
-    void setBoard(Board board) {
-//        System.out.println("setBoard");
-        this.board = board;
-    }
-
-    /**
-     * Given a screen coordinate, return the indexes of the corresponding square
-     * or -1 if there is no square.
-     * The indexes are encoded and returned as x*100 + y,
-     * where x and y are 0-based column/row indexes.
-     */
-    private int locateSquare(int x, int y) {
-//        System.out.println("locateSquare");
-        if (x < 0 || x > board.size() * squareSize
-                || y < 0 || y > board.size() * squareSize) {
-            return -1;
-        }
-        int xx = x / squareSize;
-        int yy = y / squareSize;
-        return xx * 100 + yy;
-    }
-
-    /**
-     * Draw the associated board.
-     */
-    @Override
-    public void paint(Graphics g) {
-//        System.out.println("paint");
+    public void draw(Graphics g) {
         super.paint(g);
-        // determine the square size
-        Dimension dim = getSize();
-        squareSize = Math.min(dim.width, dim.height) / board.size();
-        // draw background
-        g.setColor(boardColor);
-        g.fillRect(0, 0, squareSize * board.size(), squareSize * board.size());
-        // WRITE YOUR CODE HERE ...
-//        DrawableElements shapes = new DrawableElements();
-//        shapes.draw(g);
-        // FIXME: 4/10/2018 Separation of classes
-        /*playSound();
+        playSound();
         highlightInvalid(g);
         highlightHovered(g);
         highlightSelected(g);
         drawNumbers(g);
         insideLines(g);
         outsideBox(g);
-        solved();*/
+        solved();
+
     }
 
     /**
@@ -153,7 +27,7 @@ public class BoardPanel extends JPanel {
      * depends whether it was a valid entry or not.
      *
      * @param g This method receives the Graphics class to draw the numbers.
-     *//*
+     */
     private void drawNumbers(Graphics g) {
         for (int i = 0; i < board.size(); i++) {
             for (int j = 0; j < board.size(); j++) {
@@ -174,11 +48,11 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    *//**
+    /**
      * This method highlights a number background if the entry was invalid.
      *
      * @param g This method receives the Graphics class in order to draw the square.
-     *//*
+     */
     private void highlightInvalid(Graphics g) {
         for (int i = 0; i < board.size(); i++) {
             for (int j = 0; j < board.size(); j++) {
@@ -193,10 +67,10 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    *//**
+    /**
      * This method checks if all the numbers in the matrix meet the game rules.
      * If so, prompts the user to start a new game or to quit.
-     *//*
+     */
     private void solved() {
         if (board.isSolved()) {
             win = true;
@@ -213,11 +87,11 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    *//**
+    /**
      * This method draw the outside lines to define the sub-grid of the board
      *
      * @param g This method receives the Graphics class in order to draw the lines
-     *//*
+     */
     private void outsideBox(Graphics g) {
 //        System.out.println("outsideBox");
         g.setColor(Color.BLACK);
@@ -225,7 +99,7 @@ public class BoardPanel extends JPanel {
         g.drawLine(0, 0, 0, squareSize * board.size());             //left line
         g.drawLine(0, squareSize * board.size(), squareSize * board.size(), squareSize * board.size()); //bottom line
         g.drawLine(squareSize * board.size(), 0, squareSize * board.size(), squareSize * board.size()); //right line
-        *//*this draw the grid in the rectangle*//*
+        /*this draw the grid in the rectangle*/
         for (int i = 0; i < 276; i++) {
             if ((i % (squareSize * Math.sqrt(board.size())) == 0)) {
                 g.drawLine(i, 0, i, squareSize * board.size());
@@ -234,11 +108,11 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    *//**
+    /**
      * This method draw the inside lines to define the total rows and columns of the board
      *
      * @param g method receives the Graphics class in order to draw the lines
-     *//*
+     */
     private void insideLines(Graphics g) {
 //        System.out.println("insideLines");
         g.setColor(Color.GRAY);
@@ -249,9 +123,9 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    *//**
+    /**
      * This method plays a sound depending on which variable was set to true..
-     *//*
+     */
     private void playSound() {
         try {
             if (invalid) {
@@ -276,11 +150,11 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    *//**
+    /**
      * This method paints the pixels of the square selected in the board.
      *
      * @param g method receives the Graphics class in order to draw the actions
-     *//*
+     */
     private void highlightSelected(Graphics g) {
         if (highlightSqr) {
             g.setColor(Color.BLACK);
@@ -288,16 +162,15 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    *//**
+    /**
      * This method highlights the hovered cell in the board.
      *
      * @param g method receives the Graphics class in order to draw the actions.
-     *//*
+     */
     private void highlightHovered(Graphics g) {
         if (hover) {
             g.setColor(Color.LIGHT_GRAY);
             g.fillRect(hx * squareSize, hy * squareSize, squareSize, squareSize);
         }
-    }*/
-
+    }
 }
