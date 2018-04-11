@@ -49,6 +49,40 @@ public class SudokuDialog extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
         //setResizable(false);
+
+// Panel Settings
+        JMenu menu;
+        JMenuItem i1, i2;
+        JMenuBar mb=new JMenuBar();
+        setJMenuBar(mb);
+        menu=new JMenu("Menu");
+
+        i1=new JMenuItem("New Game");
+        i2=new JMenuItem("Exit");
+        menu.add(i1); menu.add(i2);
+        mb.add(menu);
+        setJMenuBar(mb);
+        setLayout(null);
+        setVisible(true);
+
+        /****************************/
+
+        i1.addActionListener(e -> {
+            board.reset();
+            repaint();
+        });
+
+        i2.addActionListener(e -> System.exit(0));
+
+
+        /***************************/
+
+//toolBar settings
+        JToolBar tb = new JToolBar();
+        JButton undo = new JButton("Undo");
+        tb.add(undo);
+        add(tb,BorderLayout.NORTH);
+        tb.setVisible(true);
     }
 
     /**

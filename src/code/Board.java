@@ -14,7 +14,7 @@ public class Board {
 
     /** Create a new board of the given size.
      * @param size This will be the size of the board. */
-    public Board(int size) {
+    Board(int size) {
         this.size = size;
         this.board = new int[size][size];
         this.valid = new boolean[size][size];
@@ -39,9 +39,50 @@ public class Board {
 
     /** Return the size of this board.
      * @return Returns the size of the board*/
-    public int size() {
+    int size() {
         return size;
     }
+
+    /**
+     * This method generates a board preset.
+     * */
+    public void generateBoard() {
+
+        Random rand = new Random();
+        for (int i = 0; i <size ; i++) {
+            for (int j = 0; j <size ; j++) {
+                int  n = rand.nextInt(size) + 1;
+                while (ruleChecker(i,j,n))  {
+                    board[i][j] = n;
+                    valid[i][j] = true;
+                    mutable[i][j]=true;
+
+                }
+            }
+        }
+    }
+
+    /**
+     * This method generates a board preset.
+     * */
+    /*public void generateBoard() {
+        Random random = new Random(size);
+        int limI = 0, limJ = 0;
+        while (!isSolved()) {
+            if (limI % Math.sqrt(size) == 0) {
+                limJ++;
+                limI = 0;
+            }
+            for (int i = limI; i < (limI*Math.sqrt(size)); i++) {
+                for (int j = 0; j < (limJ*Math.sqrt(size)); j++) {
+                    if (ruleChecker(i,j, random.nextInt())) {
+                        setElement(i,j,random.nextInt());
+                    }
+                }
+            }
+            if (checkSubGrid((limI*Math.sqrt(size)),(limJ*Math.sqrt(size)), )
+        }
+    }*/
 
     /**
      * This method receives a coordinate in the matrix and checks if it is allowed.
@@ -62,7 +103,7 @@ public class Board {
      * @param row This is the row at which the number would be inserted deleted.
      * @param col This is the column at which the number would be deleted.
      * */
-    public void deleteElement(int row, int col) {
+    void deleteElement(int row, int col) {
         board[row][col] = 0;
         valid[row][col] = false;
     }
@@ -73,7 +114,7 @@ public class Board {
      * @param col This is the column in the matrix.
      * @return Returns the element at the index.
      * */
-    public int getElement(int row, int col) {
+    int getElement(int row, int col) {
         return board[row][col];
     }
 
@@ -83,7 +124,7 @@ public class Board {
      * @param col This is the column at which the number is inserted.
      * @param num This is the number inserted into the matrix.
      * */
-    public void setElement(int row, int col, int num) {
+    void setElement(int row, int col, int num) {
         valid[row][col] = ruleChecker(row, col, num);
         board[row][col] = num;
     }
@@ -157,7 +198,7 @@ public class Board {
      * @param col This is the col to be checked.
      * @return Returns the value stored at the index.
      * */
-    public boolean isValid(int row, int col) {
+    boolean isValid(int row, int col) {
         return valid[row][col];
     }
 
@@ -165,7 +206,7 @@ public class Board {
      * This checks if there are any 0's left in the matrix.
      * @return Returns if there are no 0's left in the matrix.
      * */
-    public boolean isSolved() {
+    boolean isSolved() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (!valid[i][j]) {
@@ -187,8 +228,17 @@ public class Board {
     /**
      * This method rests the values in the matrix back to 0;
      * */
-    public void reset() {
+    void reset() {
         board = new int[size][size];
         valid = new boolean[size][size];
+
+    }
+    public void print() {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }
