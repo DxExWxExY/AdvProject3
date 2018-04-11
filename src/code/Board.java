@@ -1,4 +1,7 @@
 package code;
+
+import java.util.Random;
+
 /** An abstraction of the Sudoku puzzle.
  * */
 public class Board {
@@ -178,7 +181,7 @@ public class Board {
      * @return Boolean determining if it can be mutable.
      * */
     public boolean isMutable(int row, int col) {
-        return mutable[row][col];
+        return !mutable[row][col];
     }
 
     /**
