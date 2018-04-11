@@ -180,7 +180,7 @@ public class BoardPanel extends JPanel{
                     g.setColor(Color.WHITE);
                     g.fillRect(j*squareSize, i*squareSize, squareSize, squareSize);
                 }
-                else if (board.isMutable(i,j)) {
+                else if (!board.isMutable(i,j)) {
                     g.setColor(Color.DARK_GRAY);
                     g.fillRect(j*squareSize, i*squareSize, squareSize, squareSize);
                 }
@@ -235,7 +235,7 @@ public class BoardPanel extends JPanel{
      * */
     private void insideLines(Graphics g) {
 //        System.out.println("insideLines");
-        g.setColor(Color.gray);
+        g.setColor(Color.GRAY);
         for (int i = 0; i < 276; i = i + squareSize) {
             g.drawLine(i, 0, i, squareSize * board.size());
             g.drawLine(0, i, squareSize * board.size(), i); //bottom line
@@ -279,7 +279,7 @@ public class BoardPanel extends JPanel{
     * */
     private void highlightSelected(Graphics g) {
         if (highlightSqr) {
-            g.setColor(Color.cyan);
+            g.setColor(Color.BLACK);
             g.fillRect(sx*squareSize, sy*squareSize, squareSize, squareSize);
         }
     }
