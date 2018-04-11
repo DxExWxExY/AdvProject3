@@ -1,4 +1,9 @@
 package code;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Random;
+
 /** An abstraction of the Sudoku puzzle.
  * */
 public class Board {
@@ -15,16 +20,7 @@ public class Board {
         this.size = size;
         this.board = new int[size][size];
         this.valid = new boolean[size][size];
-        this.valid = new boolean[size][size];
-    }
-
-    /** Special constructor used to clone instances of a Board object.
-     * */
-    Board(int size, int[][] board, boolean[][] valid, boolean[][] mutable) {
-        this.size = size;
-        this.board = board.clone();
-        this.valid = valid.clone();
-        this.mutable = mutable.clone();
+        this.mutable = new boolean[size][size];
     }
 
     /** This method clones the current board.
@@ -38,6 +34,27 @@ public class Board {
      * @return Returns the size of the board*/
     int size() {
         return size;
+    }
+
+    /**
+     * This method generates a board preset.
+     * */
+    public void generateBoard() {
+
+        Random rand = new Random();
+        for (int i = 0; i <size ; i++) {
+            for (int j = 0; j <size ; j++) {
+                int  n = rand.nextInt(size) + 1;
+                while (ruleChecker(i,j,n))  {
+                    board[i][j] = n;
+                    valid[i][j] = true;
+                    mutable[i][j]=true;
+
+                }
+
+            }
+        }
+
     }
 
     /**
@@ -140,6 +157,29 @@ public class Board {
     }
 
     /**
+     * This performs the sub-grid rule check of sudoku.
+     * @param row This is the row which will be checked.
+     * @param col This is the column which will be checked.
+     * @return Returns if the number follows the rule.
+     * */
+//    private boolean checkSubGrid(int row, int col) {
+//        /*the starting position is determined by modding the
+//         * row/col num by the sqrt of the size*/
+//        int rowS = (int) Math.sqrt(size) * (int) Math.floor(Math.abs(row/Math.sqrt(size)));
+//        int colS = (int) Math.sqrt(size) * (int) Math.floor(Math.abs(col/Math.sqrt(size)));
+//        int rowE = (int) (rowS + (Math.sqrt(size)));
+//        int colE = (int) (colS + (Math.sqrt(size)));
+//        for (int i = rowS; i < rowE; i++) {
+//            for (int j = colS; j < colE; j++) {
+////                if (board[i][j] == num) {
+//                    return false; //if a matching number is found
+//                }
+//            }
+//        }
+//        return true;
+//    }
+
+    /**
      * This checks if the input number is in range
      * @param num This is the number to be checked.
      * @return Returns if the number follows the rule.
@@ -187,5 +227,14 @@ public class Board {
     void reset() {
         board = new int[size][size];
         valid = new boolean[size][size];
+
+    }
+    public void print() {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }
