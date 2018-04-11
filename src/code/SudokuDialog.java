@@ -1,5 +1,6 @@
 package code;
 
+import java.applet.AudioClip;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -7,7 +8,15 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.net.URL;
 import java.util.Objects;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 import javax.swing.*;
+import  sun.audio.*;    //import the sun.audio package
+import  java.io.*;
+import code.Board;
 
 /**
  * A dialog template for playing simple Sudoku games.
@@ -40,6 +49,7 @@ public class SudokuDialog extends JFrame {
     /** Create a new dialog of the given screen dimension. */
     private SudokuDialog(Dimension dim) {
         super("Sudoku");
+//        System.out.println("Sudoku Dialog Dimension");
         setSize(dim);
         board = new Board(9);
         board.generateBoard();

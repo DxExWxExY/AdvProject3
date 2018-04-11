@@ -43,6 +43,7 @@ public class BoardPanel extends JPanel{
      * Create a new board panel to display the given board.
      */
     BoardPanel(Board board, ClickListener listener) {
+//        System.out.println("BoardPanel");
         this.board = board;
         addMouseMotionListener(new MouseAdapter() {
             /**
@@ -109,6 +110,7 @@ public class BoardPanel extends JPanel{
      * where x and y are 0-based column/row indexes.
      */
     private int locateSquare(int x, int y) {
+//        System.out.println("locateSquare");
         if (x < 0 || x > board.size() * squareSize
                 || y < 0 || y > board.size() * squareSize) {
             return -1;
@@ -135,8 +137,8 @@ public class BoardPanel extends JPanel{
         playSound();
         highlightInvalid(g);
         highlightHovered(g);
-        drawNumbers(g);
         highlightSelected(g);
+        drawNumbers(g);
         insideLines(g);
         outsideBox(g);
         solved();
@@ -178,7 +180,7 @@ public class BoardPanel extends JPanel{
                     g.setColor(Color.WHITE);
                     g.fillRect(j*squareSize, i*squareSize, squareSize, squareSize);
                 }
-                else if (!board.isMutable(i,j)) {
+                else if (board.isMutable(i,j)) {
                     g.setColor(Color.DARK_GRAY);
                     g.fillRect(j*squareSize, i*squareSize, squareSize, squareSize);
                 }
