@@ -42,6 +42,7 @@ public class SudokuDialog extends JFrame {
         super("Sudoku");
         setSize(dim);
         board = new Board(9);
+        board.generateBoard();
         boardPanel = new BoardPanel(board, this::boardClicked);
         configureUI();
         //setLocationRelativeTo(null);
@@ -129,6 +130,7 @@ public class SudokuDialog extends JFrame {
         int newGame = JOptionPane.showConfirmDialog(null, "Delete Progress", "New Game", JOptionPane.YES_NO_OPTION);
         if (newGame == JOptionPane.YES_NO_OPTION) {
             board = new Board(size);
+            board.generateBoard();
             boardPanel.setBoard(board);
             boardPanel.repaint();
             boardPanel.reset = true;

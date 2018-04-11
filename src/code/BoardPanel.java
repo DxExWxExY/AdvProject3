@@ -177,6 +177,10 @@ public class BoardPanel extends JPanel{
                     g.setColor(Color.WHITE);
                     g.fillRect(j*squareSize, i*squareSize, squareSize, squareSize);
                 }
+                else if (!board.isMutable(i,j)) {
+                    g.setColor(Color.DARK_GRAY);
+                    g.fillRect(j*squareSize, i*squareSize, squareSize, squareSize);
+                }
             }
         }
     }
@@ -283,7 +287,7 @@ public class BoardPanel extends JPanel{
      * */
     private void highlightHovered(Graphics g) {
         if (hover) {
-            g.setColor(Color.YELLOW);
+            g.setColor(Color.LIGHT_GRAY);
             g.fillRect(hx*squareSize, hy*squareSize, squareSize, squareSize);
         }
     }
