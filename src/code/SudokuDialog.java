@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.Objects;
 import javax.swing.*;
@@ -22,7 +23,7 @@ public class SudokuDialog extends JFrame {
     /**
      * Default dimension of the dialog.
      */
-    private final static Dimension DEFAULT_SIZE = new Dimension(310, 430);
+    private final static Dimension DEFAULT_SIZE = new Dimension(350, 500);
     private final static String IMAGE_DIR = "/image/";
 
     /**
@@ -54,54 +55,43 @@ public class SudokuDialog extends JFrame {
         board = new Board(9);
         board.generateBoard();
         boardPanel = new BoardPanel(board, this::boardClicked);
+        configureMenu();
         configureUI();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
+    }
 
-// Panel Settings
+    private void configureMenu() {
         JMenu menu;
         JMenuItem i1, i2;
         JMenuBar mb = new JMenuBar();
         setJMenuBar(mb);
         menu = new JMenu("Menu");
+        /*Menu Items Declaration*/
+        i1 = new JMenuItem("New Game",KeyEvent.VK_N);
+        i2 = new JMenuItem("Exit",KeyEvent.VK_Q);
+        /*Menu Accelerators*/
+        i1.setAccelerator(KeyStroke.getKeyStroke("alt A"));
+        i2.setAccelerator(KeyStroke.getKeyStroke("alt E"));
+        /*Menu Items Icons*/
+        i1.setIcon(createImageIcon("new.png"));
+        i2.setIcon(createImageIcon("exit.png"));
 
-        i1 = new JMenuItem("New Game");
-        i2 = new JMenuItem("Exit");
         menu.add(i1);
         menu.add(i2);
+        menu.setMnemonic(KeyEvent.VK_B);
         mb.add(menu);
         setJMenuBar(mb);
         setLayout(null);
         setVisible(true);
-
-        /****************************/
-
+        /*Menu Items Listeners*/
         i1.addActionListener(e -> {
             board.reset();
+            board.generateBoard();
             repaint();
         });
 
         i2.addActionListener(e -> System.exit(0));
-
-
-        /***************************/
-
-//toolBar settings
-        JToolBar tb = new JToolBar();
-        JButton undo = new JButton("Undo");
-        tb.add(undo);
-        add(tb, BorderLayout.NORTH);
-        tb.setVisible(true);
-
-        board.generateBoard();
-        board.print();
-        System.out.println();
-        while (!board.isSolved()) {
-            board.generateBoard();
-        }
-        board.print();
-
-
     }
 
     /**
@@ -171,7 +161,7 @@ public class SudokuDialog extends JFrame {
      * Configure the UI.
      */
     private void configureUI() {
-        setIconImage(Objects.requireNonNull(createImageIcon()).getImage());
+        setIconImage(Objects.requireNonNull(createImageIcon("sudoku.png")).getImage());
         setLayout(new BorderLayout());
         JPanel buttons = makeControlPanel();
         // boarder: top, left, bottom, right
@@ -191,13 +181,40 @@ public class SudokuDialog extends JFrame {
      */
     private JPanel makeControlPanel() {
         JPanel newButtons = new JPanel(new FlowLayout());
-        JButton new4Button = new JButton("New (4x4)");
+        JButton undo, redo, solve, can;
+
+        undo = new JButton();
+        redo = new JButton();
+        solve = new JButton();
+        can = new JButton();
+
+        undo.setPreferredSize(new Dimension(35,35));
+        redo.setPreferredSize(new Dimension(35,35));
+        solve.setPreferredSize(new Dimension(35,35));
+        can.setPreferredSize(new Dimension(35,35));
+
+        undo.setIcon(createImageIcon("undo.png"));
+        redo.setIcon(createImageIcon("redo.png"));
+        solve.setIcon(createImageIcon("solve.png"));
+        can.setIcon(createImageIcon("cansolve.png"));
+
+        newButtons.add(undo);
+        newButtons.add(redo);
+        newButtons.add(solve);
+        newButtons.add(can);
+
+
+
+        /*JButton new4Button = new JButton("New (4x4)");
         for (JButton button : new JButton[]{new4Button, new JButton("New (9x9)")}) {
             button.setFocusPainted(false);
             button.addActionListener(e ->
                     newClicked(e.getSource() == new4Button ? 4 : 9));
             newButtons.add(button);
-        }
+        }*/
+
+
+
         newButtons.setAlignmentX(LEFT_ALIGNMENT);
         // buttons labeled 1, 2, ..., 9, and X.
         JPanel numberButtons = new JPanel(new FlowLayout());
@@ -221,8 +238,8 @@ public class SudokuDialog extends JFrame {
     /**
      * Create an image icon from the given image file.
      */
-    private ImageIcon createImageIcon() {
-        URL imageUrl = getClass().getResource(IMAGE_DIR + "sudoku.png");
+    private ImageIcon createImageIcon(String name) {
+        URL imageUrl = getClass().getResource(IMAGE_DIR + name);
         if (imageUrl != null) {
             return new ImageIcon(imageUrl);
         }
