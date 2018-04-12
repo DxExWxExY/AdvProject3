@@ -135,7 +135,7 @@ public class BoardPanel extends JPanel {
         g.setColor(boardColor);
         g.fillRect(0, 0, squareSize * board.size(), squareSize * board.size());
         // WRITE YOUR CODE HERE ...
-
+        setBackground(SudokuDialog.BACKGROUND);
         playSound();
         highlightInvalid(g);
         highlightHovered(g);
@@ -281,7 +281,7 @@ public class BoardPanel extends JPanel {
      */
     private void highlightSelected(Graphics g) {
         if (highlightSqr) {
-            g.setColor(Color.BLACK);
+            g.setColor(new Color(105,105,105));
             g.fillRect(sx * squareSize, sy * squareSize, squareSize, squareSize);
         }
     }
