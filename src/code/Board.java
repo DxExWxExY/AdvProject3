@@ -24,7 +24,7 @@ public class Board {
         this.size = size;
         this.board = new int[size][size];
         this.valid = new boolean[size][size];
-        this.valid = new boolean[size][size];
+        this.mutable = new boolean[size][size];
     }
 
     /**
@@ -61,7 +61,7 @@ public class Board {
             }
 
         }
-        solveSudoku();
+        //solveSudoku();
     }
 
     /**
