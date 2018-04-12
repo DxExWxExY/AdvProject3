@@ -1,14 +1,18 @@
 package code;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
+import javafx.scene.input.Mnemonic;
+
+import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.Objects;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 /**
  * A dialog template for playing simple Sudoku games.
@@ -25,6 +29,7 @@ public class SudokuDialog extends JFrame {
      */
     private final static Dimension DEFAULT_SIZE = new Dimension(350, 500);
     private final static String IMAGE_DIR = "/image/";
+    public final static Color BACKGROUND = new Color(66,104,102);
 
     /**
      * Sudoku board.
@@ -166,56 +171,70 @@ public class SudokuDialog extends JFrame {
         JPanel buttons = makeControlPanel();
         // boarder: top, left, bottom, right
         buttons.setBorder(BorderFactory.createEmptyBorder(10, 16, 0, 16));
+        buttons.setBackground(BACKGROUND);
         add(buttons, BorderLayout.NORTH);
         JPanel board = new JPanel();
         board.setBorder(BorderFactory.createEmptyBorder(10, 16, 0, 16));
         board.setLayout(new GridLayout(1, 1));
         board.add(boardPanel);
+        board.setBackground(BACKGROUND);
         add(board, BorderLayout.CENTER);
         msgBar.setBorder(BorderFactory.createEmptyBorder(10, 16, 10, 0));
-        add(msgBar, BorderLayout.SOUTH);
+        msgBar.setBackground(BACKGROUND);
+        //add(msgBar, BorderLayout.SOUTH);
+    }
+
+    private JButton makeButton(String name, int command) {
+        JButton button = new JButton();
+        button.setPreferredSize(new Dimension(35,35));
+        button.setIcon(createImageIcon(name));
+        button.setBackground(BACKGROUND);
+        button.setBorder(null);
+        button.setFocusable(false);
+        button.setMnemonic(command);
+        button.addMouseListener(new MouseAdapter() {
+            /**
+             * {@inheritDoc}
+             * @param e
+             */
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setBackground(Color.GRAY);
+            }
+
+            /**
+             * {@inheritDoc}
+             * @param e
+             */
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setBackground(BACKGROUND);
+            }
+        });
+        return button;
+    }
+
+    private JPanel makeToolBar() {
+        JPanel toolBar = new JPanel();
+        JButton undo, redo, solve, can;
+
+        undo = makeButton("undo.png", KeyEvent.VK_Z);
+        redo = makeButton("redo.png", KeyEvent.VK_Y);
+        solve = makeButton("solve.png", KeyEvent.VK_S);
+        can = makeButton("can.png", KeyEvent.VK_C);
+
+        toolBar.add(undo);
+        toolBar.add(redo);
+        toolBar.add(solve);
+        toolBar.add(can);
+        toolBar.setBackground(BACKGROUND);
+        return toolBar;
     }
 
     /**
      * Create a control panel consisting of new and number buttons.
      */
     private JPanel makeControlPanel() {
-        JPanel newButtons = new JPanel(new FlowLayout());
-        JButton undo, redo, solve, can;
-
-        undo = new JButton();
-        redo = new JButton();
-        solve = new JButton();
-        can = new JButton();
-
-        undo.setPreferredSize(new Dimension(35,35));
-        redo.setPreferredSize(new Dimension(35,35));
-        solve.setPreferredSize(new Dimension(35,35));
-        can.setPreferredSize(new Dimension(35,35));
-
-        undo.setIcon(createImageIcon("undo.png"));
-        redo.setIcon(createImageIcon("redo.png"));
-        solve.setIcon(createImageIcon("solve.png"));
-        can.setIcon(createImageIcon("cansolve.png"));
-
-        newButtons.add(undo);
-        newButtons.add(redo);
-        newButtons.add(solve);
-        newButtons.add(can);
-
-
-
-        /*JButton new4Button = new JButton("New (4x4)");
-        for (JButton button : new JButton[]{new4Button, new JButton("New (9x9)")}) {
-            button.setFocusPainted(false);
-            button.addActionListener(e ->
-                    newClicked(e.getSource() == new4Button ? 4 : 9));
-            newButtons.add(button);
-        }*/
-
-
-
-        newButtons.setAlignmentX(LEFT_ALIGNMENT);
         // buttons labeled 1, 2, ..., 9, and X.
         JPanel numberButtons = new JPanel(new FlowLayout());
         int maxNumber = board.size() + 1;
@@ -227,11 +246,13 @@ public class SudokuDialog extends JFrame {
             button.addActionListener(e -> numberClicked(number));
             numberButtons.add(button);
         }
-        numberButtons.setAlignmentX(LEFT_ALIGNMENT);
+        numberButtons.setAlignmentX(CENTER_ALIGNMENT);
+        numberButtons.setBackground(BACKGROUND);
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
-        content.add(newButtons);
+        content.add(makeToolBar());
         content.add(numberButtons);
+        content.setBackground(BACKGROUND);
         return content;
     }
 

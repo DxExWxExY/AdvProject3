@@ -2,7 +2,7 @@ package code;
 
 /** Class used to implement undo's and redo's.
  * */
-public class HistoryNode {
+class HistoryNode {
     private HistoryNode next;
     private HistoryNode previous;
     private Board board;
