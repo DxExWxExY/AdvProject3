@@ -13,18 +13,18 @@ public class HistoryNode {
      * */
     HistoryNode(Board board, HistoryNode prevState) throws CloneNotSupportedException {
         this.board = board.clone();
-        this.board.next = null;
-        this.board.previous = prevState;
+        this.next = null;
+        this.previous = prevState;
         prevState.next = this;
     }
 
     /**
      * Constructor that creates a head node by cloning the current board (empty board).
-     * @param newState
+     * @param board The initial node at the beginning of the game.
      */
     HistoryNode(Board board) throws CloneNotSupportedException {
         this.board = board.clone();
-        this.board.next = null;
-        this.board.previous = null;
+        this.next = null;
+        this.previous = null;
     }
 }
