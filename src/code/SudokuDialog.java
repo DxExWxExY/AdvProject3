@@ -57,7 +57,7 @@ public class SudokuDialog extends JFrame {
     private SudokuDialog(Dimension dim) {
         super("Sudoku");
         setSize(dim);
-        board = new Board(9);
+        board = new Board(4);
         board.generateBoard();
         boardPanel = new BoardPanel(board, this::boardClicked);
         configureMenu();
