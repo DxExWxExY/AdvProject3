@@ -1,4 +1,7 @@
 package code;
+
+import java.util.Random;
+
 /** An abstraction of the Sudoku puzzle.
  * */
 public class Board {
@@ -18,15 +21,6 @@ public class Board {
         this.valid = new boolean[size][size];
     }
 
-    /** Special constructor used to clone instances of a Board object.
-     * */
-    Board(int size, int[][] board, boolean[][] valid, boolean[][] mutable) {
-        this.size = size;
-        this.board = board.clone();
-        this.valid = valid.clone();
-        this.mutable = mutable.clone();
-    }
-
     /** This method clones the current board.
      * @return Returns a copy of a board object.
      * */
@@ -38,6 +32,25 @@ public class Board {
      * @return Returns the size of the board*/
     int size() {
         return size;
+    }
+
+    /**
+     * This method generates a board preset.
+     * */
+    void generateBoard() {
+
+        Random rand = new Random();
+        for (int i = 0; i <size ; i++) {
+            for (int j = 0; j <size ; j++) {
+                int  n = rand.nextInt(size) + 1;
+                while (ruleChecker(i,j,n))  {
+                    board[i][j] = n;
+                    valid[i][j] = true;
+                    mutable[i][j]=true;
+
+                }
+            }
+        }
     }
 
     /**
@@ -177,8 +190,8 @@ public class Board {
      * This method returns whether an element in the board is mutable.
      * @return Boolean determining if it can be mutable.
      * */
-    public boolean isMutable(int row, int col) {
-        return mutable[row][col];
+    boolean isMutable(int row, int col) {
+        return !mutable[row][col];
     }
 
     /**
@@ -187,5 +200,14 @@ public class Board {
     void reset() {
         board = new int[size][size];
         valid = new boolean[size][size];
+
+    }
+    public void print() {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }
