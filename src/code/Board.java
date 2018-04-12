@@ -10,7 +10,7 @@ public class Board {
     /**
      * Size of this board (number of columns/rows).
      */
-    private final int size;
+    private int size;
     private int[][] board;
     private boolean[][] valid;
     private boolean[][] mutable;
@@ -247,10 +247,11 @@ public class Board {
     /**
      * This method rests the values in the matrix back to 0;
      */
-    void reset() {
-        board = new int[size][size];
-        valid = new boolean[size][size];
-
+    void reset(int size) {
+        this.size = size;
+        this.board = new int[size][size];
+        this.valid = new boolean[size][size];
+        this.mutable = new boolean[size][size];
     }
 
 

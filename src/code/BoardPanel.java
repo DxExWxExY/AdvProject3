@@ -204,7 +204,7 @@ public class BoardPanel extends JPanel {
                     "Congratulations", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
                     null, options, options[1]);
             if (solved == JOptionPane.YES_OPTION) {
-                board.reset();
+                board.reset(board.size());
             } else {
                 System.exit(0);
             }

@@ -1,7 +1,5 @@
 package code;
 
-import javafx.scene.input.Mnemonic;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -9,10 +7,6 @@ import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.Objects;
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 
 /**
  * A dialog template for playing simple Sudoku games.
@@ -27,9 +21,9 @@ public class SudokuDialog extends JFrame {
     /**
      * Default dimension of the dialog.
      */
-    private final static Dimension DEFAULT_SIZE = new Dimension(350, 500);
+    private final static Dimension DEFAULT_SIZE = new Dimension(310, 460    );
     private final static String IMAGE_DIR = "/image/";
-    public final static Color BACKGROUND = new Color(66,104,102);
+    final static Color BACKGROUND = new Color(47,76,76);
 
     /**
      * Sudoku board.
@@ -66,39 +60,6 @@ public class SudokuDialog extends JFrame {
         setVisible(true);
     }
 
-    private void configureMenu() {
-        JMenu menu;
-        JMenuItem i1, i2;
-        JMenuBar mb = new JMenuBar();
-        setJMenuBar(mb);
-        menu = new JMenu("Menu");
-        /*Menu Items Declaration*/
-        i1 = new JMenuItem("New Game",KeyEvent.VK_N);
-        i2 = new JMenuItem("Exit",KeyEvent.VK_Q);
-        /*Menu Accelerators*/
-        i1.setAccelerator(KeyStroke.getKeyStroke("alt A"));
-        i2.setAccelerator(KeyStroke.getKeyStroke("alt E"));
-        /*Menu Items Icons*/
-        i1.setIcon(createImageIcon("new.png"));
-        i2.setIcon(createImageIcon("exit.png"));
-
-        menu.add(i1);
-        menu.add(i2);
-        menu.setMnemonic(KeyEvent.VK_B);
-        mb.add(menu);
-        setJMenuBar(mb);
-        setLayout(null);
-        setVisible(true);
-        /*Menu Items Listeners*/
-        i1.addActionListener(e -> {
-            board.reset();
-            board.generateBoard();
-            repaint();
-        });
-
-        i2.addActionListener(e -> System.exit(0));
-    }
-
     /**
      * Callback to be invoked when a square of the board is clicked.
      *
@@ -119,38 +80,22 @@ public class SudokuDialog extends JFrame {
      * @param number Clicked number (1-9), or 0 for "X".
      */
     private void numberClicked(int number) {
-        if (number == 0) {
+        if (number == 0 && board.isMutable(boardPanel.sy, boardPanel.sx)) {
             board.deleteElement(boardPanel.sy, boardPanel.sx);
             boardPanel.setBoard(board);
             showMessage("Number Deleted");
-        } else {
+        }
+        else if (board.isMutable(boardPanel.sy, boardPanel.sx)) {
             board.setElement(boardPanel.sy, boardPanel.sx, number);
             boardPanel.setBoard(board);
             boardPanel.invalid = !board.isValid(boardPanel.sy, boardPanel.sx);
             showMessage(String.format("Inserted Number %d", number));
         }
+        else {
+            boardPanel.invalid = true;
+        }
         boardPanel.highlightSqr = false;
         boardPanel.repaint();
-    }
-
-    /**
-     * Callback to be invoked when a new button is clicked.
-     * If the current game is over, start a new game of the given size;
-     * otherwise, prompt the user for a confirmation and then proceed
-     * accordingly.
-     *
-     * @param size Requested puzzle size, either 4 or 9.
-     */
-    private void newClicked(int size) {
-        int newGame = JOptionPane.showConfirmDialog(null, "Delete Progress", "New Game", JOptionPane.YES_NO_OPTION);
-        if (newGame == JOptionPane.YES_NO_OPTION) {
-            board = new Board(size);
-            board.generateBoard();
-            boardPanel.setBoard(board);
-            boardPanel.repaint();
-            boardPanel.reset = true;
-            showMessage("New Game Board: " + size);
-        }
     }
 
     /**
@@ -160,6 +105,52 @@ public class SudokuDialog extends JFrame {
      */
     private void showMessage(String msg) {
         msgBar.setText(msg);
+    }
+
+    private void configureMenu() {
+        JMenu menu;
+        JMenuItem newGame, exit;
+        JMenuBar mb = new JMenuBar();
+        setJMenuBar(mb);
+        menu = new JMenu("Menu");
+        /*Menu Items Declaration*/
+        newGame = new JMenuItem("New Game",KeyEvent.VK_N);
+        exit = new JMenuItem("Exit",KeyEvent.VK_Q);
+        /*Menu Accelerators*/
+        newGame.setAccelerator(KeyStroke.getKeyStroke("alt A"));
+        exit.setAccelerator(KeyStroke.getKeyStroke("alt E"));
+        /*Menu Items Icons*/
+        newGame.setIcon(createImageIcon("new.png"));
+        exit.setIcon(createImageIcon("exit.png"));
+
+        menu.add(newGame);
+        menu.add(exit);
+        menu.setMnemonic(KeyEvent.VK_B);
+        mb.add(menu);
+        setJMenuBar(mb);
+        setLayout(null);
+        setVisible(true);
+        /*Menu Items Listeners*/
+        newGame.addActionListener(e -> {
+            Object[] options = {"4x4", "9x9", "Exit"};
+            int n = JOptionPane.showOptionDialog(null, "Select a Sudoku Size",
+                    "New Game", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                    null, options, options[2]);
+            switch (n) {
+                case JOptionPane.YES_OPTION:
+                    board.reset(4);
+                    break;
+                case JOptionPane.NO_OPTION:
+                    board.reset(9);
+                    break;
+                case JOptionPane.CANCEL_OPTION:
+                    System.exit(0);
+                    break;
+            }
+            board.generateBoard();
+            repaint();
+        });
+        exit.addActionListener(e -> System.exit(0));
     }
 
     /**
