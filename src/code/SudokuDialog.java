@@ -36,6 +36,12 @@ public class SudokuDialog extends JFrame {
      */
     private Board board;
 
+    /**
+     * Node pointers to first board and to subsequent boards created by moves
+     */
+    private HistoryNode head;
+    private HistoryNode history_iterator;
+
     /* Special panel to display a Sudoku board. */
     private BoardPanel boardPanel;
 
@@ -57,13 +63,14 @@ public class SudokuDialog extends JFrame {
     private SudokuDialog(Dimension dim) {
         super("Sudoku");
         setSize(dim);
-        board = new Board(4);
+        board = new board(4);
         board.generateBoard();
         boardPanel = new BoardPanel(board, this::boardClicked);
         configureMenu();
         configureUI();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
+
     }
 
     private void configureMenu() {
@@ -266,7 +273,7 @@ public class SudokuDialog extends JFrame {
         }
         return null;
     }
-
+    
     public static void main(String[] args) {
         new SudokuDialog();
     }
