@@ -290,12 +290,25 @@ public class SudokuDialog extends JFrame {
     }
 
     /**
-     * Goes back to previous game state, essentially "undoing" a move
+     * Goes back to previous game state, essentially "undoing" a move if possible
      */
     private void undo() {
-        historyIterator = historyIterator.getPrevious();
-        setBoard();
+        if(historyIterator.getPrevious() != head) {
+            historyIterator = historyIterator.getPrevious();
+            setBoard();
+        }
     }
+
+    /**
+     * Goes forward to next game state, essentially "redoing" a move if possible
+     */
+    private void redo() {
+        if(historyIterator.getNext() != null) {
+            historyIterator = historyIterator.getNext();
+            setBoard();
+        }
+    }
+
 
     /**
      * Clears space by encompassing the retrieval of a board object from a HistoryNode object
