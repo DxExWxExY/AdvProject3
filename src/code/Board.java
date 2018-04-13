@@ -61,7 +61,6 @@ public class Board {
             }
 
         }
-        //solveSudoku();
     }
 
     /**
@@ -252,15 +251,5 @@ public class Board {
         this.board = new int[size][size];
         this.valid = new boolean[size][size];
         this.mutable = new boolean[size][size];
-    }
-
-
-    void print() {
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                System.out.print(board[i][j] + " ");
-            }
-            System.out.println();
-        }
     }
 }
