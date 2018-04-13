@@ -230,6 +230,16 @@ public class SudokuDialog extends JFrame {
         solve = makeButton("solve.png", KeyEvent.VK_S);
         can = makeButton("can.png", KeyEvent.VK_C);
 
+        undo.addActionListener(e -> {
+            undo();
+            repaint();
+        });
+
+        redo.addActionListener(e -> {
+            redo();
+            repaint();
+        });
+
         toolBar.add(undo);
         toolBar.add(redo);
         toolBar.add(solve);
