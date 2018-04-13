@@ -11,20 +11,39 @@ class HistoryNode {
      * node "next" pointer to this node.
      * @param board The instance to be cloned.
      * */
-    HistoryNode(Board board, HistoryNode prevState) throws CloneNotSupportedException {
-        this.board = board.clone();
+    HistoryNode(Board board, HistoryNode prevState) {
+        this.board = board;
         this.next = null;
         this.previous = prevState;
-        prevState.next = this;
     }
 
     /**
      * Constructor that creates a head node by cloning the current board (empty board).
      * @param board The initial node at the beginning of the game.
      */
-    HistoryNode(Board board) throws CloneNotSupportedException {
-        this.board = board.clone();
+    HistoryNode(Board board) {
+        this.board = board;
         this.next = null;
         this.previous = null;
+    }
+
+    public Board getBoard() throws CloneNotSupportedException {
+        return board.clone();
+    }
+
+    public HistoryNode getNext() {
+        return next;
+    }
+
+    public HistoryNode getPrevious() {
+        return previous;
+    }
+
+    public void setNext(HistoryNode next) {
+        this.next = next;
+    }
+
+    public void setPrevious(HistoryNode previous) {
+        this.previous = previous;
     }
 }

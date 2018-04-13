@@ -8,6 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.Objects;
+import java.util.stream.Sink;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -40,7 +41,7 @@ public class SudokuDialog extends JFrame {
      * Node pointers to first board and to subsequent boards created by moves
      */
     private HistoryNode head;
-    private HistoryNode history_iterator;
+    private HistoryNode historyIterator;
 
     /* Special panel to display a Sudoku board. */
     private BoardPanel boardPanel;
@@ -63,8 +64,7 @@ public class SudokuDialog extends JFrame {
     private SudokuDialog(Dimension dim) {
         super("Sudoku");
         setSize(dim);
-        board = new board(4);
-        board.generateBoard();
+        createHistory(true);
         boardPanel = new BoardPanel(board, this::boardClicked);
         configureMenu();
         configureUI();
@@ -273,7 +273,27 @@ public class SudokuDialog extends JFrame {
         }
         return null;
     }
-    
+
+    /**
+     * Creates history for undo and redo functions of Sudoku game
+     * @param isFirst determines whether the history node created is the first or not
+     */
+    private void createHistory(boolean isFirst) {
+        if(isFirst) {
+            head = new HistoryNode(new Board(4));
+            historyIterator = head;
+        } else {
+            historyIterator.setNext(new HistoryNode(board, historyIterator));
+            historyIterator = historyIterator.getNext();
+        }
+
+        try {
+            board = historyIterator.getBoard();
+        } catch(CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         new SudokuDialog();
     }
