@@ -137,6 +137,7 @@ public class SudokuDialog extends JFrame {
             showMessage(String.format("Inserted Number %d", number));
         }
         boardPanel.highlightSqr = false;
+        createHistory(false);
         boardPanel.repaint();
     }
 
