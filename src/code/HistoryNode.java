@@ -12,9 +12,10 @@ class HistoryNode {
      * @param board The instance to be cloned.
      * */
     HistoryNode(Board board, HistoryNode prevState) {
-        this.board = board;
+        this.board = board.cloneBoard();
         this.next = null;
         this.previous = prevState;
+        board.print();
     }
 
     /**
@@ -25,10 +26,12 @@ class HistoryNode {
         this.board = board;
         this.next = null;
         this.previous = null;
+        this.board.generateBoard();
+        board.print();
     }
 
-    public Board getBoard() throws CloneNotSupportedException {
-        return board.clone();
+    public Board getBoard() {
+        return this.board.cloneBoard();
     }
 
     public HistoryNode getNext() {

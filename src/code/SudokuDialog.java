@@ -1,19 +1,12 @@
 package code;
 
-import javafx.scene.input.Mnemonic;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.Objects;
-import java.util.stream.Sink;
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 
 /**
  * A dialog template for playing simple Sudoku games.
@@ -55,7 +48,7 @@ public class SudokuDialog extends JFrame {
      * Create a new dialog.
      */
     private SudokuDialog() {
-        this(DEFAULT_SIZE);
+        this(Toolkit.getDefaultToolkit().getScreenSize());
     }
 
     /**
@@ -63,8 +56,9 @@ public class SudokuDialog extends JFrame {
      */
     private SudokuDialog(Dimension dim) {
         super("Sudoku");
-        setSize(dim);
-        createHistory(true);
+        setLocation(dim.width/2-180, dim.height/2-250);
+        setSize(DEFAULT_SIZE);
+        initHistory();
         boardPanel = new BoardPanel(board, this::boardClicked);
         configureMenu();
         configureUI();
@@ -128,16 +122,16 @@ public class SudokuDialog extends JFrame {
     private void numberClicked(int number) {
         if (number == 0) {
             board.deleteElement(boardPanel.sy, boardPanel.sx);
-            boardPanel.setBoard(board);
+            boardPanel.setBoard(this.board);
             showMessage("Number Deleted");
         } else {
             board.setElement(boardPanel.sy, boardPanel.sx, number);
-            boardPanel.setBoard(board);
+            boardPanel.setBoard(this.board);
             boardPanel.invalid = !board.isValid(boardPanel.sy, boardPanel.sx);
             showMessage(String.format("Inserted Number %d", number));
         }
+        createHistory();
         boardPanel.highlightSqr = false;
-        createHistory(false);
         boardPanel.repaint();
     }
 
@@ -233,12 +227,10 @@ public class SudokuDialog extends JFrame {
 
         undo.addActionListener(e -> {
             undo();
-            repaint();
         });
 
         redo.addActionListener(e -> {
             redo();
-            repaint();
         });
 
         toolBar.add(undo);
@@ -287,16 +279,16 @@ public class SudokuDialog extends JFrame {
 
     /**
      * Creates history for undo and redo functions of Sudoku game
-     * @param isFirst determines whether the history node created is the first or not
+     *
      */
-    private void createHistory(boolean isFirst) {
-        if(isFirst) {
-            head = new HistoryNode(new Board(4));
-            historyIterator = head;
-        } else {
-            historyIterator.setNext(new HistoryNode(board, historyIterator));
-            historyIterator = historyIterator.getNext();
-        }
+    private void createHistory() {
+        this.historyIterator.setNext(new HistoryNode(board, historyIterator));
+        this.historyIterator = historyIterator.getNext();
+        setBoard();
+    }
+
+    private void initHistory() {
+        this.historyIterator = new HistoryNode(new Board(4));
         setBoard();
     }
 
@@ -304,9 +296,13 @@ public class SudokuDialog extends JFrame {
      * Goes back to previous game state, essentially "undoing" a move if possible
      */
     private void undo() {
-        if(historyIterator.getPrevious() != head) {
+        if(historyIterator.getPrevious() != null) {
             historyIterator = historyIterator.getPrevious();
             setBoard();
+            boardPanel.highlightSqr = false;
+            boardPanel.setBoard(board);
+            board.print();
+            boardPanel.repaint();
         }
     }
 
@@ -317,19 +313,18 @@ public class SudokuDialog extends JFrame {
         if(historyIterator.getNext() != null) {
             historyIterator = historyIterator.getNext();
             setBoard();
+            boardPanel.highlightSqr = false;
+            boardPanel.setBoard(board);
+            board.print();
+            boardPanel.repaint();
         }
     }
-
 
     /**
      * Clears space by encompassing the retrieval of a board object from a HistoryNode object
      */
     private void setBoard() {
-        try {
-            board = historyIterator.getBoard();
-        } catch(CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
+        this.board = historyIterator.getBoard();
     }
 
     public static void main(String[] args) {

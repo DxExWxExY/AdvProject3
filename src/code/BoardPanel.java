@@ -31,7 +31,7 @@ public class BoardPanel extends JPanel {
      * the Board to be displayed.
      */
 
-    private Board board;
+    Board board;
     private int squareSize, hx, hy;
     int sx, sy;
     private boolean win, hover;
@@ -280,6 +280,7 @@ public class BoardPanel extends JPanel {
      * @param g method receives the Graphics class in order to draw the actions
      */
     private void highlightSelected(Graphics g) {
+//        System.out.println(sx + " " + sy);
         if (highlightSqr) {
             g.setColor(new Color(105,105,105));
             g.fillRect(sx * squareSize, sy * squareSize, squareSize, squareSize);
