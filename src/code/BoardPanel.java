@@ -29,7 +29,7 @@ public class BoardPanel extends JPanel{
      * Board to be displayed.
      */
 
-    private Board board;
+    Board board;
     private int squareSize, hx, hy;
     private boolean win, hover;
     int sx, sy;
