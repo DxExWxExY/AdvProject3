@@ -29,9 +29,9 @@ class Board implements Cloneable{
 
     private Board(int size, int[][] board, boolean[][] valid, boolean[][] mutable) {
         this.size = size;
-        this.board = board.clone();
-        this.valid = valid.clone();
-        this.mutable = mutable.clone();
+        this.board = arrayClone(board);
+        this.valid = arrayClone(valid);
+        this.mutable = arrayClone(mutable);
     }
 
     /**
@@ -47,6 +47,22 @@ class Board implements Cloneable{
     protected Board clone() throws CloneNotSupportedException {
         return (Board) super.clone();
 
+    }
+
+    private int[][] arrayClone(int[][] original) {
+        int [][] clone = new int[original.length][original.length];
+        for (int i = 0; i < original.length; i++) {
+            System.arraycopy(original[i], 0, clone[i], 0, original.length);
+        }
+        return clone;
+    }
+
+    private boolean[][] arrayClone(boolean[][] original) {
+        boolean [][] clone = new boolean[original.length][original.length];
+        for (int i = 0; i < original.length; i++) {
+            System.arraycopy(original[i], 0, clone[i], 0, original.length);
+        }
+        return clone;
     }
 
     /**
@@ -269,11 +285,10 @@ class Board implements Cloneable{
     }
 
 
-    void print(String msg) {
-        System.out.println("======"+msg+"=======");
-        for (int i = 0; i < board.length; i++) {
+    void print() {
+        for (int[] aBoard : board) {
             for (int j = 0; j < board.length; j++) {
-                System.out.print(board[i][j] + " ");
+                System.out.print(aBoard[j] + " ");
             }
             System.out.println();
         }

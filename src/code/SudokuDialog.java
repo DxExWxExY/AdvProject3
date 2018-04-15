@@ -89,10 +89,6 @@ public class SudokuDialog extends JFrame {
                 showMessage(String.format("Inserted Number %d", number));
             }
             boardPanel.setBoard(historyIterator.getBoard());
-            System.out.println("Mod " + historyIterator);
-            historyIterator.print("After Mod "+boardPanel.board);
-            historyIterator.getPrevious().getBoard().print("PREV NODE");
-            System.out.println("=========================\n=================");
         }
         else {
             boardPanel.invalid = true;
@@ -276,24 +272,18 @@ public class SudokuDialog extends JFrame {
      *
      */
     private void createHistory() {
-        System.out.println("Old "+historyIterator.getBoard());
-        historyIterator.print("Pre Clone "+boardPanel.board);
         try {
             historyIterator.setNext(new HistoryNode(historyIterator.getBoard().clone(), historyIterator));
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
         historyIterator = historyIterator.getNext();
-        System.out.println("New "+historyIterator);
-        historyIterator.print("Post Clone "+boardPanel.board);
     }
 
     private void initHistory() {
         historyIterator = new HistoryNode(new Board(4));
-        System.out.println("Initial "+historyIterator);
         historyIterator.generateBoard();
-        historyIterator.print("Initial");
-        System.out.println("=========================\n=================");
+
     }
 
     /**
@@ -301,14 +291,9 @@ public class SudokuDialog extends JFrame {
      */
     private void undo() {
         if(historyIterator.getPrevious() != null) {
-            System.out.println("Pre "+historyIterator);
-            boardPanel.board.print("Pre Undo "+boardPanel.board);
             historyIterator = historyIterator.getPrevious();
             boardPanel.setBoard(historyIterator.getBoard());
             boardPanel.highlightSqr = false;
-            System.out.println("Post "+historyIterator);
-            boardPanel.board.print("After Undo "+boardPanel.board);
-            System.out.println("=========================\n=================");
             boardPanel.repaint();
         }
     }
@@ -318,13 +303,9 @@ public class SudokuDialog extends JFrame {
      */
     private void redo() {
         if(historyIterator.getNext() != null) {
-            System.out.println("RB "+boardPanel.board);
             historyIterator = historyIterator.getNext();
             boardPanel.highlightSqr = false;
             boardPanel.setBoard(historyIterator.getBoard());
-            historyIterator.print("Redo "+historyIterator);
-            System.out.println("RA "+boardPanel.board);
-            System.out.println("=========================\n=================");
             boardPanel.repaint();
         }
     }
