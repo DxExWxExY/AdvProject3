@@ -37,7 +37,7 @@ public class SudokuDialog extends JFrame {
      * Create a new dialog.
      */
     private SudokuDialog() {
-        this(DEFAULT_SIZE);
+        this(Toolkit.getDefaultToolkit().getScreenSize());
     }
 
     /**
@@ -45,7 +45,8 @@ public class SudokuDialog extends JFrame {
      */
     private SudokuDialog(Dimension dim) {
         super("Sudoku");
-        setSize(dim);
+        setLocation(dim.width/2-155, dim.height/2-225);
+        setSize(DEFAULT_SIZE);
         initHistory();
         board.generateBoard();
         boardPanel = new BoardPanel(board, this::boardClicked);
