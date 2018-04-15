@@ -1,10 +1,9 @@
 package code;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.Objects;
 import javax.swing.*;
@@ -20,12 +19,13 @@ import javax.swing.*;
 public class SudokuDialog extends JFrame {
 
     /** Default dimension of the dialog. */
-    private final static Dimension DEFAULT_SIZE = new Dimension(310, 430);
+    private final static Dimension DEFAULT_SIZE = new Dimension(310, 450);
     private final static String IMAGE_DIR = "/image/";
     final static Color BACKGROUND = new Color(47,76,76);
 
     /** Sudoku board. */
     private Board board;
+    private HistoryNode historyIterator;
 
     /* Special panel to display a Sudoku board. */
     private BoardPanel boardPanel;
@@ -46,7 +46,7 @@ public class SudokuDialog extends JFrame {
     private SudokuDialog(Dimension dim) {
         super("Sudoku");
         setSize(dim);
-        board = new Board(9);
+        initHistory();
         board.generateBoard();
         boardPanel = new BoardPanel(board, this::boardClicked);
         configureMenu();
@@ -55,39 +55,6 @@ public class SudokuDialog extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
 
-    }
-
-    private void configureMenu() {
-        JMenu menu;
-        JMenuItem i1, i2;
-        JMenuBar mb = new JMenuBar();
-        setJMenuBar(mb);
-        menu = new JMenu("Menu");
-        /*Menu Items Declaration*/
-        i1 = new JMenuItem("New Game",KeyEvent.VK_N);
-        i2 = new JMenuItem("Exit",KeyEvent.VK_Q);
-        /*Menu Accelerators*/
-        i1.setAccelerator(KeyStroke.getKeyStroke("alt A"));
-        i2.setAccelerator(KeyStroke.getKeyStroke("alt E"));
-        /*Menu Items Icons*/
-        i1.setIcon(createImageIcon("new.png"));
-        i2.setIcon(createImageIcon("exit.png"));
-
-        menu.add(i1);
-        menu.add(i2);
-        menu.setMnemonic(KeyEvent.VK_B);
-        mb.add(menu);
-        setJMenuBar(mb);
-        setLayout(null);
-        setVisible(true);
-        /*Menu Items Listeners*/
-        i1.addActionListener(e -> {
-            board.reset();
-            board.generateBoard();
-            repaint();
-        });
-
-        i2.addActionListener(e -> System.exit(0));
     }
 
     /**
@@ -260,27 +227,11 @@ public class SudokuDialog extends JFrame {
         return button;
     }
 
-    private JPanel makeToolBar() {
-        JPanel toolBar = new JPanel();
-        JButton undo, redo, solve, can;
 
-        undo = makeButton("undo.png", KeyEvent.VK_Z);
-        redo = makeButton("redo.png", KeyEvent.VK_Y);
-        solve = makeButton("solve.png", KeyEvent.VK_S);
-        can = makeButton("can.png", KeyEvent.VK_C);
-
-        toolBar.add(undo);
-        toolBar.add(redo);
-        toolBar.add(solve);
-        toolBar.add(can);
-        toolBar.setBackground(BACKGROUND);
-        return toolBar;
-    }
 
     /**
      * Create a control panel consisting of new and number buttons.
      */
-
     private JPanel makeToolBar() {
         JPanel toolBar = new JPanel();
         JButton undo, redo, solve, can;
@@ -290,13 +241,9 @@ public class SudokuDialog extends JFrame {
         solve = makeButton("solve.png", KeyEvent.VK_S);
         can = makeButton("can.png", KeyEvent.VK_C);
 
-        undo.addActionListener(e -> {
-            undo();
-        });
+        undo.addActionListener(e -> undo());
 
-        redo.addActionListener(e -> {
-            redo();
-        });
+        redo.addActionListener(e -> redo());
 
         toolBar.add(undo);
         toolBar.add(redo);
