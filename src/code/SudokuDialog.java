@@ -49,10 +49,11 @@ public class SudokuDialog extends JFrame {
         setSize(DEFAULT_SIZE);
         initHistory();
         board.generateBoard();
+        board.print("Initial");
         boardPanel = new BoardPanel(board, this::boardClicked);
         configureMenu();
         configureUI();
-        //setLocationRelativeTo(null);
+        setResizable(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
 
@@ -79,21 +80,22 @@ public class SudokuDialog extends JFrame {
      * @param number Clicked number (1-9), or 0 for "X".
      */
     private void numberClicked(int number) {
+        createHistory();
+        boardPanel.setBoard(board);
         if (number == 0 && board.isMutable(boardPanel.sy, boardPanel.sx)) {
             board.deleteElement(boardPanel.sy, boardPanel.sx);
-            boardPanel.setBoard(this.board);
             showMessage("Number Deleted");
         }
         else if (board.isMutable(boardPanel.sy, boardPanel.sx)) {
             board.setElement(boardPanel.sy, boardPanel.sx, number);
-            boardPanel.setBoard(this.board);
             boardPanel.invalid = !board.isValid(boardPanel.sy, boardPanel.sx);
             showMessage(String.format("Inserted Number %d", number));
         }
         else {
             boardPanel.invalid = true;
         }
-        createHistory();
+        System.out.println("Mod "+board);
+        board.print("After Mod");
         boardPanel.highlightSqr = false;
         boardPanel.repaint();
     }
@@ -228,8 +230,6 @@ public class SudokuDialog extends JFrame {
         return button;
     }
 
-
-
     /**
      * Create a control panel consisting of new and number buttons.
      */
@@ -295,9 +295,17 @@ public class SudokuDialog extends JFrame {
      *
      */
     private void createHistory() {
-        this.historyIterator.setNext(new HistoryNode(board, historyIterator));
+        System.out.println("Old "+board);
+        board.print("Pre Clone");
+        try {
+            this.historyIterator.setNext(new HistoryNode(board.clone(), historyIterator));
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
         this.historyIterator = historyIterator.getNext();
         setBoard();
+        System.out.println("New "+board);
+        board.print("Post Clone");
     }
 
     private void initHistory() {
@@ -312,9 +320,9 @@ public class SudokuDialog extends JFrame {
         if(historyIterator.getPrevious() != null) {
             historyIterator = historyIterator.getPrevious();
             setBoard();
+            boardPanel.setBoard(this.board);
             boardPanel.highlightSqr = false;
-            boardPanel.setBoard(board);
-            board.print();
+            board.print("Undo");
             boardPanel.repaint();
         }
     }
@@ -328,7 +336,7 @@ public class SudokuDialog extends JFrame {
             setBoard();
             boardPanel.highlightSqr = false;
             boardPanel.setBoard(board);
-            board.print();
+            board.print("Redo");
             boardPanel.repaint();
         }
     }

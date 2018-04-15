@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * An abstraction of the Sudoku puzzle.
  */
-public class Board {
+class Board implements Cloneable{
 
     /**
      * Size of this board (number of columns/rows).
@@ -41,6 +41,11 @@ public class Board {
      */
     Board cloneBoard(){
         return new Board(size,this.board,this.valid,this.mutable);
+
+    }
+
+    protected Board clone() throws CloneNotSupportedException {
+        return (Board) super.clone();
 
     }
 
@@ -264,13 +269,13 @@ public class Board {
     }
 
 
-    void print() {
+    void print(String msg) {
+        System.out.println("======"+msg+"=======");
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
                 System.out.print(board[i][j] + " ");
             }
             System.out.println();
         }
-        System.out.println("=============");
     }
 }
