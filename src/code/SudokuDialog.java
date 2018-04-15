@@ -1,9 +1,10 @@
 package code;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.net.URL;
 import java.util.Objects;
 import javax.swing.*;
@@ -18,24 +19,18 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class SudokuDialog extends JFrame {
 
-    /**
-     * Default dimension of the dialog.
-     */
-    private final static Dimension DEFAULT_SIZE = new Dimension(310, 460    );
+    /** Default dimension of the dialog. */
+    private final static Dimension DEFAULT_SIZE = new Dimension(310, 430);
     private final static String IMAGE_DIR = "/image/";
     final static Color BACKGROUND = new Color(47,76,76);
 
-    /**
-     * Sudoku board.
-     */
+    /** Sudoku board. */
     private Board board;
 
     /* Special panel to display a Sudoku board. */
     private BoardPanel boardPanel;
 
-    /**
-     * Message bar to display various messages.
-     */
+    /** Message bar to display various messages. */
     private JLabel msgBar = new JLabel("");
 
     /**
@@ -51,13 +46,48 @@ public class SudokuDialog extends JFrame {
     private SudokuDialog(Dimension dim) {
         super("Sudoku");
         setSize(dim);
-        board = new Board(4);
+        board = new Board(9);
         board.generateBoard();
         boardPanel = new BoardPanel(board, this::boardClicked);
         configureMenu();
         configureUI();
+        //setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
+
+    }
+
+    private void configureMenu() {
+        JMenu menu;
+        JMenuItem i1, i2;
+        JMenuBar mb = new JMenuBar();
+        setJMenuBar(mb);
+        menu = new JMenu("Menu");
+        /*Menu Items Declaration*/
+        i1 = new JMenuItem("New Game",KeyEvent.VK_N);
+        i2 = new JMenuItem("Exit",KeyEvent.VK_Q);
+        /*Menu Accelerators*/
+        i1.setAccelerator(KeyStroke.getKeyStroke("alt A"));
+        i2.setAccelerator(KeyStroke.getKeyStroke("alt E"));
+        /*Menu Items Icons*/
+        i1.setIcon(createImageIcon("new.png"));
+        i2.setIcon(createImageIcon("exit.png"));
+
+        menu.add(i1);
+        menu.add(i2);
+        menu.setMnemonic(KeyEvent.VK_B);
+        mb.add(menu);
+        setJMenuBar(mb);
+        setLayout(null);
+        setVisible(true);
+        /*Menu Items Listeners*/
+        i1.addActionListener(e -> {
+            board.reset();
+            board.generateBoard();
+            repaint();
+        });
+
+        i2.addActionListener(e -> System.exit(0));
     }
 
     /**
@@ -67,6 +97,7 @@ public class SudokuDialog extends JFrame {
      * @param y 0-based column index of the clicked square.
      */
     private void boardClicked(int x, int y) {
+//        System.out.println("boardClicked");
         boardPanel.sx = x;
         boardPanel.sy = y;
         boardPanel.highlightSqr = true;
@@ -82,20 +113,41 @@ public class SudokuDialog extends JFrame {
     private void numberClicked(int number) {
         if (number == 0 && board.isMutable(boardPanel.sy, boardPanel.sx)) {
             board.deleteElement(boardPanel.sy, boardPanel.sx);
-            boardPanel.setBoard(board);
+            boardPanel.setBoard(this.board);
             showMessage("Number Deleted");
         }
         else if (board.isMutable(boardPanel.sy, boardPanel.sx)) {
             board.setElement(boardPanel.sy, boardPanel.sx, number);
-            boardPanel.setBoard(board);
+            boardPanel.setBoard(this.board);
             boardPanel.invalid = !board.isValid(boardPanel.sy, boardPanel.sx);
             showMessage(String.format("Inserted Number %d", number));
         }
         else {
             boardPanel.invalid = true;
         }
+        createHistory();
         boardPanel.highlightSqr = false;
         boardPanel.repaint();
+    }
+
+    /**
+     * Callback to be invoked when a new button is clicked.
+     * If the current game is over, start a new game of the given size;
+     * otherwise, prompt the user for a confirmation and then proceed
+     * accordingly.
+     *
+     * @param size Requested puzzle size, either 4 or 9.
+     */
+    private void newClicked(int size) {
+        int newGame = JOptionPane.showConfirmDialog(null, "Delete Progress", "New Game", JOptionPane.YES_NO_OPTION);
+        if (newGame == JOptionPane.YES_NO_OPTION) {
+            board = new Board(size);
+            board.generateBoard();
+            boardPanel.setBoard(board);
+            boardPanel.repaint();
+            boardPanel.reset = true;
+            showMessage("New Game Board: " + size);
+        }
     }
 
     /**
@@ -107,6 +159,9 @@ public class SudokuDialog extends JFrame {
         msgBar.setText(msg);
     }
 
+    /**
+     * Configure the UI.
+     */
     private void configureMenu() {
         JMenu menu;
         JMenuItem newGame, exit;
@@ -225,6 +280,35 @@ public class SudokuDialog extends JFrame {
     /**
      * Create a control panel consisting of new and number buttons.
      */
+
+    private JPanel makeToolBar() {
+        JPanel toolBar = new JPanel();
+        JButton undo, redo, solve, can;
+
+        undo = makeButton("undo.png", KeyEvent.VK_Z);
+        redo = makeButton("redo.png", KeyEvent.VK_Y);
+        solve = makeButton("solve.png", KeyEvent.VK_S);
+        can = makeButton("can.png", KeyEvent.VK_C);
+
+        undo.addActionListener(e -> {
+            undo();
+        });
+
+        redo.addActionListener(e -> {
+            redo();
+        });
+
+        toolBar.add(undo);
+        toolBar.add(redo);
+        toolBar.add(solve);
+        toolBar.add(can);
+        toolBar.setBackground(BACKGROUND);
+        return toolBar;
+    }
+
+    /**
+     * Create a control panel consisting of new and number buttons.
+     */
     private JPanel makeControlPanel() {
         // buttons labeled 1, 2, ..., 9, and X.
         JPanel numberButtons = new JPanel(new FlowLayout());
@@ -256,6 +340,56 @@ public class SudokuDialog extends JFrame {
             return new ImageIcon(imageUrl);
         }
         return null;
+    }
+
+    /**
+     * Creates history for undo and redo functions of Sudoku game
+     *
+     */
+    private void createHistory() {
+        this.historyIterator.setNext(new HistoryNode(board, historyIterator));
+        this.historyIterator = historyIterator.getNext();
+        setBoard();
+    }
+
+    private void initHistory() {
+        this.historyIterator = new HistoryNode(new Board(4));
+        setBoard();
+    }
+
+    /**
+     * Goes back to previous game state, essentially "undoing" a move if possible
+     */
+    private void undo() {
+        if(historyIterator.getPrevious() != null) {
+            historyIterator = historyIterator.getPrevious();
+            setBoard();
+            boardPanel.highlightSqr = false;
+            boardPanel.setBoard(board);
+            board.print();
+            boardPanel.repaint();
+        }
+    }
+
+    /**
+     * Goes forward to next game state, essentially "redoing" a move if possible
+     */
+    private void redo() {
+        if(historyIterator.getNext() != null) {
+            historyIterator = historyIterator.getNext();
+            setBoard();
+            boardPanel.highlightSqr = false;
+            boardPanel.setBoard(board);
+            board.print();
+            boardPanel.repaint();
+        }
+    }
+
+    /**
+     * Clears space by encompassing the retrieval of a board object from a HistoryNode object
+     */
+    private void setBoard() {
+        this.board = historyIterator.getBoard();
     }
 
     public static void main(String[] args) {

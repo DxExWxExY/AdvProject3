@@ -27,13 +27,21 @@ public class Board {
         this.mutable = new boolean[size][size];
     }
 
+    private Board(int size, int[][] board, boolean[][] valid, boolean[][] mutable) {
+        this.size = size;
+        this.board = board.clone();
+        this.valid = valid.clone();
+        this.mutable = mutable.clone();
+    }
+
     /**
      * This method clones the current board.
      *
      * @return Returns a copy of a board object.
      */
-    public Board clone() throws CloneNotSupportedException {
-        return (Board) super.clone();
+    Board cloneBoard(){
+        return new Board(size,this.board,this.valid,this.mutable);
+
     }
 
     /**
@@ -49,6 +57,7 @@ public class Board {
      * This method generates a board preset with a given difficulty.
      */
     void generateBoard() {
+
         Random rand = new Random();
         for (int e = 0; e < 30; e++) {
             int n = rand.nextInt(size);
@@ -251,5 +260,17 @@ public class Board {
         this.board = new int[size][size];
         this.valid = new boolean[size][size];
         this.mutable = new boolean[size][size];
+
+    }
+
+
+    void print() {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println("=============");
     }
 }

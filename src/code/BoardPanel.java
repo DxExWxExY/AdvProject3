@@ -5,36 +5,34 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.InputStream;
 import javax.swing.*;
-
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
+
 
 /**
  * A special panel class to display a Sudoku board modeled by the
  * {@link Board} class. You need to write code for
  * the paint() method.
  *
- * @author Yoonsik Cheon
  * @see Board
+ * @author Yoonsik Cheon
  */
 @SuppressWarnings("serial")
-public class BoardPanel extends JPanel {
+public class BoardPanel extends JPanel{
 
     /**
      * Background color of the board.
      */
     private static Color boardColor = new Color(70, 70, 70);
 
-
     /**
-     * Width and height of a square in pixels and other flags variables and
-     * the Board to be displayed.
+     * Board to be displayed.
      */
 
     private Board board;
     private int squareSize, hx, hy;
-    int sx, sy;
     private boolean win, hover;
+    int sx, sy;
     boolean highlightSqr, invalid, reset;
 
 
@@ -91,7 +89,6 @@ public class BoardPanel extends JPanel {
             }
         });
     }
-
 
     /**
      * Set the board to be displayed.
@@ -204,8 +201,9 @@ public class BoardPanel extends JPanel {
                     "Congratulations", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
                     null, options, options[1]);
             if (solved == JOptionPane.YES_OPTION) {
-                board.reset(board.size());
-            } else {
+                board.reset();
+            }
+            else {
                 System.exit(0);
             }
         }
@@ -252,23 +250,26 @@ public class BoardPanel extends JPanel {
      */
     private void playSound() {
         try {
-            if (invalid) {
+            if(invalid) {
                 InputStream song1 = getClass().getResourceAsStream("/sound/error.wav");
                 AudioStream audioStream = new AudioStream(song1);
                 AudioPlayer.player.start(audioStream);
                 invalid = false;
-            } else if (reset) {
+            }
+            else if(reset) {
                 InputStream song1 = getClass().getResourceAsStream("/sound/new.wav");
                 AudioStream audioStream = new AudioStream(song1);
                 AudioPlayer.player.start(audioStream);
                 reset = false;
-            } else if (win) {
+            }
+            else if(win) {
                 InputStream song1 = getClass().getResourceAsStream("/sound/win.wav");
                 AudioStream audioStream = new AudioStream(song1);
                 AudioPlayer.player.start(audioStream);
                 win = false;
             }
-        } catch (Exception ex) {
+        }
+        catch(Exception ex) {
             System.out.println("Error with playing sound.");
             ex.printStackTrace();
         }
