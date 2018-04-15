@@ -43,4 +43,40 @@ class HistoryNode {
     void setNext(HistoryNode next) {
         this.next = next;
     }
+
+    void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public boolean isMutable(int sy, int sx) {
+        return board.isMutable(sy, sx);
+    }
+
+    public void deleteElement(int sy, int sx) {
+        board.deleteElement(sy, sx);
+    }
+
+    public void setElement(int sy, int sx, int number) {
+        board.setElement(sy, sx, number);
+    }
+
+    public boolean isValid(int sy, int sx) {
+        return board.isValid(sy,sx);
+    }
+
+    public void print(String s) {
+        board.print(s);
+    }
+
+    public void reset(int i) {
+        board.reset(i);
+    }
+
+    public void generateBoard() {
+        board.generateBoard();
+    }
+
+    public int size() {
+        return board.size();
+    }
 }
