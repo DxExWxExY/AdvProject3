@@ -195,7 +195,7 @@ public class BoardPanel extends JPanel{
     private void solved() {
 
 
-        if (board.isSolved()&& board.getsolved()== false) {
+        if (board.isSolved() && !board.getSolved()) {
             win = true;
             playSound();
             Object[] options = {"New Game", "Exit"};

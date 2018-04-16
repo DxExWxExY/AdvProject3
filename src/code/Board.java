@@ -289,7 +289,8 @@ class  Board implements Cloneable{
     void setSolved(boolean flag){
         this.solved=flag;
     }
-    boolean getsolved(){
+
+    boolean getSolved(){
         return this.solved;
     }
 
