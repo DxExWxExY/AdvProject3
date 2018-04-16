@@ -73,15 +73,7 @@ class HistoryNode {
         return board.size();
     }
 
-    boolean isSolved() {
-        return board.isSolved();
-    }
-
-    void setSolved(boolean b) {
-        board.setSolved(true);
-    }
-
-    void solveSudoku() {
-        board.solveSudoku();
+    void setBoard(Board test) {
+        this.board = test;
     }
 }

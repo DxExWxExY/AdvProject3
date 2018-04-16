@@ -321,10 +321,13 @@ public class SudokuDialog extends JFrame {
     }
 
     private void solve() {
-        if (historyIterator.getBoard().isSolvable()) {
-            historyIterator.setSolved(true);
+        Board test = historyIterator.getBoard().cloneBoard();
+        if (test.isSolvable()) {
+            test.setSolved(true);
+            createHistory();
+            historyIterator.setBoard(test);
             boardPanel.setBoard(historyIterator.getBoard());
-            historyIterator.solveSudoku();
+            test.solveSudoku();
             boardPanel.repaint();
         }
         else {
@@ -333,12 +336,12 @@ public class SudokuDialog extends JFrame {
     }
 
     private void isSolvable() {
-        if (!historyIterator.isSolved()) {
-            Board check = historyIterator.getBoard().cloneBoard();
-            if (check.isSolvable()) {
-                JOptionPane.showMessageDialog(null, "This board can be solved.", "Can It Be Solved?", JOptionPane.INFORMATION_MESSAGE);
+        Board test = historyIterator.getBoard().cloneBoard();
+        if (!test.isSolved()) {
+            if (test.isSolvable()) {
+                JOptionPane.showMessageDialog(null, "This board CAN be solved.", "Can It Be Solved?", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(null, "This boars cannot be solved.", "Can It Be Solved?", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "This board CANNOT be solved.", "Can It Be Solved?", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }

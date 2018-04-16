@@ -140,7 +140,7 @@ public class BoardPanel extends JPanel{
         drawNumbers(g);
         insideLines(g);
         outsideBox(g);
-        solved();
+//        solved();
     }
 
     /**

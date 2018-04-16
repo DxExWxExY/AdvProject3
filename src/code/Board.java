@@ -85,7 +85,7 @@ class  Board implements Cloneable{
                 Board init = this.cloneBoard();
                 while (!init.solveSudoku());
             });
-            f.get(1, TimeUnit.MILLISECONDS);
+            f.get(100, TimeUnit.MILLISECONDS);
         } catch (final TimeoutException e) {
             reset(this.size);
             generateBoard();
@@ -101,9 +101,7 @@ class  Board implements Cloneable{
      */
     private void fillBoard() {
         Random rand = new Random();
-        int placed = 0;
-        int difficulty = (size == 4) ? 4 : 30;
-        while (placed < difficulty){
+        for (int placed = (size == 4) ? 4 : 26; placed > 0; placed--){
             int n = rand.nextInt(size);
             int i = rand.nextInt(size);
             int j = rand.nextInt(size);
@@ -111,7 +109,6 @@ class  Board implements Cloneable{
                 board[i][j] = n;
                 valid[i][j] = true;
                 mutable[i][j] = true;
-                placed++;
             }
         }
     }
@@ -124,7 +121,7 @@ class  Board implements Cloneable{
                 Board init = this.cloneBoard();
                 return init.solveSudoku();
             });
-            f.get(1, TimeUnit.MILLISECONDS);
+            f.get(100, TimeUnit.MILLISECONDS);
         } catch (final TimeoutException e) {
             return false;
         } catch (final Exception e) {
