@@ -193,7 +193,9 @@ public class BoardPanel extends JPanel{
      * If so, prompts the user to start a new game or to quit.
      */
     private void solved() {
-        if (board.isSolved()) {
+
+
+        if (board.isSolved()&& board.getsolved()== false) {
             win = true;
             playSound();
             Object[] options = {"New Game", "Exit"};

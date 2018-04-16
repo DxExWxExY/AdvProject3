@@ -16,6 +16,7 @@ class HistoryNode {
         this.next = null;
         this.previous = prevState;
         prevState.next = this;
+
     }
 
     /**
@@ -67,6 +68,7 @@ class HistoryNode {
     void generateBoard() {
         board.generateBoard();
     }
+
 
     int size() {
         return board.size();

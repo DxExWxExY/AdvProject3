@@ -223,6 +223,9 @@ public class SudokuDialog extends JFrame {
 
         redo.addActionListener(e -> redo());
 
+        solve.addActionListener(e -> solve());
+
+        can.addActionListener(e-> checkSolution());
         toolBar.add(undo);
         toolBar.add(redo);
         toolBar.add(solve);
@@ -309,7 +312,22 @@ public class SudokuDialog extends JFrame {
             boardPanel.repaint();
         }
     }
+    private void solve() {
+        Board solveSudoku=historyIterator.getBoard();
+        solveSudoku.setSolved(true);
+        solveSudoku.solveSudoku();
+        boardPanel.repaint();
 
+    }
+    private void checkSolution() {
+        Board check=historyIterator.getBoard();
+        check.setSolved(true);
+
+        check.solveSudoku();
+       // showMessage(String.format("solution"));
+        boardPanel.repaint();
+
+    }
     public static void main(String[] args) {
         new SudokuDialog();
     }

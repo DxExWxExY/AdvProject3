@@ -5,12 +5,13 @@ import java.util.Random;
 /**
  * An abstraction of the Sudoku puzzle.
  */
-class Board implements Cloneable{
+class  Board implements Cloneable{
 
     /**
      * Size of this board (number of columns/rows).
      */
     private int size;
+    private boolean solved;
     private int[][] board;
     private boolean[][] valid;
     private boolean[][] mutable;
@@ -32,6 +33,7 @@ class Board implements Cloneable{
         this.board = arrayClone(board);
         this.valid = arrayClone(valid);
         this.mutable = arrayClone(mutable);
+        this.solved=false;
     }
 
     /**
@@ -98,7 +100,7 @@ class Board implements Cloneable{
      *
      * @return Determines if the board can be solvable or not.
      */
-    private boolean solveSudoku() {
+    public boolean solveSudoku() {
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 if (board[row][col] == 0) {
@@ -114,11 +116,11 @@ class Board implements Cloneable{
                             }
                         }
                     }
-                    return false;
+                return false;
                 }
             }
         }
-        return true;
+     return true;
     }
 
     /**
@@ -284,6 +286,12 @@ class Board implements Cloneable{
 
     }
 
+    void setSolved(boolean flag){
+        this.solved=flag;
+    }
+    boolean getsolved(){
+        return this.solved;
+    }
 
     void print() {
         for (int[] aBoard : board) {
