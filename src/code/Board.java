@@ -47,11 +47,17 @@ class  Board implements Cloneable{
 
     }
 
+    /**
+     * Implementation of clone class.
+     * */
     protected Board clone() throws CloneNotSupportedException {
         return (Board) super.clone();
 
     }
 
+    /**
+     * Resolution to array clone.
+     * */
     private int[][] arrayClone(int[][] original) {
         int [][] clone = new int[original.length][original.length];
         for (int i = 0; i < original.length; i++) {
@@ -60,6 +66,9 @@ class  Board implements Cloneable{
         return clone;
     }
 
+    /**
+     * Resolution to array clone.
+     * */
     private boolean[][] arrayClone(boolean[][] original) {
         boolean [][] clone = new boolean[original.length][original.length];
         for (int i = 0; i < original.length; i++) {
@@ -77,6 +86,9 @@ class  Board implements Cloneable{
         return size;
     }
 
+    /**
+     * Method that creates a solvable board by backtracking.
+     * */
     void generateBoard() {
         ExecutorService service = Executors.newSingleThreadExecutor();
         fillBoard();
@@ -113,6 +125,9 @@ class  Board implements Cloneable{
         }
     }
 
+    /**
+     * Backtracking method that determines if a configuration is solvable.
+     * */
     boolean isSolvable() {
         ExecutorService service = Executors.newSingleThreadExecutor();
         try {
@@ -322,10 +337,18 @@ class  Board implements Cloneable{
 
     }
 
-    void setWasSolved(boolean solved){
-        this.wasSolved = solved;
+    /**
+     * wasSolved flag modifier.
+     * */
+    void setWasSolved(){
+        this.wasSolved = true;
     }
 
+    /**
+     * wasSolver vale returner.
+     *
+     * @return The current value of wasSolved.
+     * */
     boolean getWasSolved(){
         return this.wasSolved;
     }

@@ -26,7 +26,7 @@ public class SudokuDialog extends JFrame {
     /** Sudoku historyIterator. */
     private HistoryNode historyIterator;
 
-    /* Special panel to display a Sudoku historyIterator. */
+    /** Special panel to display a Sudoku historyIterator. */
     private BoardPanel boardPanel;
 
     /** Message bar to display various messages. */
@@ -160,6 +160,7 @@ public class SudokuDialog extends JFrame {
                     System.exit(0);
                     break;
             }
+            boardPanel.reset = true;
             historyIterator.generateBoard();
             content.revalidate();
             repaint();
@@ -189,6 +190,12 @@ public class SudokuDialog extends JFrame {
         //add(msgBar, BorderLayout.SOUTH);
     }
 
+    /**
+     * Method used to create the options buttons.
+     *
+     * @param name String of the file name.
+     * @param command Key event to be associated with the button.
+     * */
     private JButton makeOptionButtons(String name, int command) {
         JButton button = new JButton();
         button.setPreferredSize(new Dimension(35,35));
@@ -224,7 +231,7 @@ public class SudokuDialog extends JFrame {
      */
     private JPanel makeToolBar() {
         JPanel toolBar = new JPanel();
-        JButton undo, redo, solve, can, hint;
+        JButton undo, redo, solve, can;
         undo = makeOptionButtons("undo.png", KeyEvent.VK_Z);
         redo = makeOptionButtons("redo.png", KeyEvent.VK_Y);
         solve = makeOptionButtons("solve.png", KeyEvent.VK_S);
@@ -254,6 +261,9 @@ public class SudokuDialog extends JFrame {
         return content;
     }
 
+    /**
+     * Method in charge of creating the number buttons.
+     * */
     private JPanel makeNumberButtons() {
         JPanel numberButtons = new JPanel(new FlowLayout());
         int maxNumber = historyIterator.size() + 1;
@@ -297,6 +307,9 @@ public class SudokuDialog extends JFrame {
         historyIterator = historyIterator.getNext();
     }
 
+    /**
+     * Method used to create a HistoryNode for undo and redo.
+     * */
     private void initHistory() {
         historyIterator = new HistoryNode(new Board(4));
         historyIterator.generateBoard();
@@ -327,10 +340,13 @@ public class SudokuDialog extends JFrame {
         }
     }
 
+    /**
+     * Method called when the solve button is pressed.
+     * */
     private void solve() {
         Board test = historyIterator.getBoard().cloneBoard();
         if (test.isSolvable()) {
-            test.setWasSolved(true);
+            test.setWasSolved();
             createHistory();
             historyIterator.setBoard(test);
             boardPanel.setBoard(historyIterator.getBoard());
@@ -342,6 +358,9 @@ public class SudokuDialog extends JFrame {
         }
     }
 
+    /**
+     * Method called when the can solve button is called.
+     * */
     private void isSolvable() {
         Board test = historyIterator.getBoard().cloneBoard();
         if (!test.isSolved()) {
