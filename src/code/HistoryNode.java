@@ -69,7 +69,6 @@ class HistoryNode {
         board.generateBoard();
     }
 
-
     int size() {
         return board.size();
     }

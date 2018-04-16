@@ -31,6 +31,8 @@ public class SudokuDialog extends JFrame {
 
     /** Message bar to display various messages. */
     private JLabel msgBar = new JLabel("");
+    private JPanel content = new JPanel();
+    private JPanel numberButtons;
 
     /**
      * Create a new dialog.
@@ -110,11 +112,10 @@ public class SudokuDialog extends JFrame {
      * Configure the UI.
      */
     private void configureMenu() {
-        JMenu menu;
-        JMenuItem newGame, exit;
+        JMenu menu = new JMenu("Menu");
         JMenuBar mb = new JMenuBar();
+        JMenuItem newGame, exit;
         setJMenuBar(mb);
-        menu = new JMenu("Menu");
         /*Menu Items Declaration*/
         newGame = new JMenuItem("New Game",KeyEvent.VK_N);
         exit = new JMenuItem("Exit",KeyEvent.VK_Q);
@@ -141,15 +142,22 @@ public class SudokuDialog extends JFrame {
             switch (n) {
                 case JOptionPane.YES_OPTION:
                     historyIterator.reset(4);
+                    content.remove(numberButtons);
+                    numberButtons = makeNumberButtons();
+                    content.add(numberButtons);
                     break;
                 case JOptionPane.NO_OPTION:
                     historyIterator.reset(9);
+                    content.remove(numberButtons);
+                    numberButtons = makeNumberButtons();
+                    content.add(numberButtons);
                     break;
                 case JOptionPane.CANCEL_OPTION:
                     System.exit(0);
                     break;
             }
             historyIterator.generateBoard();
+            content.revalidate();
             repaint();
         });
         exit.addActionListener(e -> System.exit(0));
@@ -177,7 +185,7 @@ public class SudokuDialog extends JFrame {
         //add(msgBar, BorderLayout.SOUTH);
     }
 
-    private JButton makeButton(String name, int command) {
+    private JButton makeOptionButtons(String name, int command) {
         JButton button = new JButton();
         button.setPreferredSize(new Dimension(35,35));
         button.setIcon(createImageIcon(name));
@@ -212,24 +220,21 @@ public class SudokuDialog extends JFrame {
      */
     private JPanel makeToolBar() {
         JPanel toolBar = new JPanel();
-        JButton undo, redo, solve, can;
-
-        undo = makeButton("undo.png", KeyEvent.VK_Z);
-        redo = makeButton("redo.png", KeyEvent.VK_Y);
-        solve = makeButton("solve.png", KeyEvent.VK_S);
-        can = makeButton("can.png", KeyEvent.VK_C);
-
+        JButton undo, redo, solve, can, hint;
+        undo = makeOptionButtons("undo.png", KeyEvent.VK_Z);
+        redo = makeOptionButtons("redo.png", KeyEvent.VK_Y);
+        solve = makeOptionButtons("solve.png", KeyEvent.VK_S);
+        can = makeOptionButtons("can.png", KeyEvent.VK_C);
+        hint = makeOptionButtons("hint.png", KeyEvent.VK_H);
         undo.addActionListener(e -> undo());
-
         redo.addActionListener(e -> redo());
-
         solve.addActionListener(e -> solve());
-
-        can.addActionListener(e-> checkSolution());
+        can.addActionListener(e-> isSolvable());
         toolBar.add(undo);
         toolBar.add(redo);
         toolBar.add(solve);
         toolBar.add(can);
+        toolBar.add(hint);
         toolBar.setBackground(BACKGROUND);
         return toolBar;
     }
@@ -239,6 +244,15 @@ public class SudokuDialog extends JFrame {
      */
     private JPanel makeControlPanel() {
         // buttons labeled 1, 2, ..., 9, and X.
+        numberButtons = makeNumberButtons();
+        content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
+        content.add(makeToolBar());
+        content.add(numberButtons);
+        content.setBackground(BACKGROUND);
+        return content;
+    }
+
+    private JPanel makeNumberButtons() {
         JPanel numberButtons = new JPanel(new FlowLayout());
         int maxNumber = historyIterator.size() + 1;
         for (int i = 1; i <= maxNumber; i++) {
@@ -251,12 +265,7 @@ public class SudokuDialog extends JFrame {
         }
         numberButtons.setAlignmentX(CENTER_ALIGNMENT);
         numberButtons.setBackground(BACKGROUND);
-        JPanel content = new JPanel();
-        content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
-        content.add(makeToolBar());
-        content.add(numberButtons);
-        content.setBackground(BACKGROUND);
-        return content;
+        return numberButtons;
     }
 
     /**
@@ -312,22 +321,23 @@ public class SudokuDialog extends JFrame {
             boardPanel.repaint();
         }
     }
+
     private void solve() {
-        Board solveSudoku=historyIterator.getBoard();
+        Board solveSudoku = historyIterator.getBoard();
         solveSudoku.setSolved(true);
         solveSudoku.solveSudoku();
         boardPanel.repaint();
 
     }
-    private void checkSolution() {
-        Board check=historyIterator.getBoard();
-        check.setSolved(true);
 
+    private void isSolvable() {
+        Board check = historyIterator.getBoard();
+        check.setSolved(true);
         check.solveSudoku();
-       // showMessage(String.format("solution"));
         boardPanel.repaint();
 
     }
+
     public static void main(String[] args) {
         new SudokuDialog();
     }

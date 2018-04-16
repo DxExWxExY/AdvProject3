@@ -1,6 +1,7 @@
 package code;
 
 import java.util.Random;
+import java.util.concurrent.*;
 
 /**
  * An abstraction of the Sudoku puzzle.
@@ -76,13 +77,35 @@ class  Board implements Cloneable{
         return size;
     }
 
+    void generateBoard() {
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        fillBoard();
+        try {
+            final Future f = service.submit(() -> {
+                Board init = this.cloneBoard();
+                while (!init.solveSudoku());
+            });
+            System.out.println(f.get(1, TimeUnit.MILLISECONDS));
+        } catch (final TimeoutException e) {
+            System.out.println("NON SOLVABLE");
+            reset(this.size);
+            generateBoard();
+
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            service.shutdown();
+        }
+    }
+
     /**
      * This method generates a board preset with a given difficulty.
      */
-    void generateBoard() {
-
+    void fillBoard() {
         Random rand = new Random();
-        for (int e = 0; e < 30; e++) {
+        int placed = 0;
+        int difficulty = (size == 4) ? 4 : 30;
+        while (placed < difficulty){
             int n = rand.nextInt(size);
             int i = rand.nextInt(size);
             int j = rand.nextInt(size);
@@ -90,9 +113,10 @@ class  Board implements Cloneable{
                 board[i][j] = n;
                 valid[i][j] = true;
                 mutable[i][j] = true;
+                placed++;
             }
-
         }
+
     }
 
     /**
@@ -286,8 +310,8 @@ class  Board implements Cloneable{
 
     }
 
-    void setSolved(boolean flag){
-        this.solved=flag;
+    void setSolved(boolean solved){
+        this.solved = solved;
     }
 
     boolean getSolved(){

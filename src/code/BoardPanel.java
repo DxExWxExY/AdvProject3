@@ -29,7 +29,7 @@ public class BoardPanel extends JPanel{
      * Board to be displayed.
      */
 
-    Board board;
+    private Board board;
     private int squareSize, hx, hy;
     private boolean win, hover;
     int sx, sy;
@@ -140,7 +140,7 @@ public class BoardPanel extends JPanel{
         drawNumbers(g);
         insideLines(g);
         outsideBox(g);
-        solved();
+        //solved();
     }
 
     /**
