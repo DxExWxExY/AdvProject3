@@ -225,7 +225,6 @@ public class SudokuDialog extends JFrame {
         redo = makeOptionButtons("redo.png", KeyEvent.VK_Y);
         solve = makeOptionButtons("solve.png", KeyEvent.VK_S);
         can = makeOptionButtons("can.png", KeyEvent.VK_C);
-        hint = makeOptionButtons("hint.png", KeyEvent.VK_H);
         undo.addActionListener(e -> undo());
         redo.addActionListener(e -> redo());
         solve.addActionListener(e -> solve());
@@ -234,7 +233,6 @@ public class SudokuDialog extends JFrame {
         toolBar.add(redo);
         toolBar.add(solve);
         toolBar.add(can);
-        toolBar.add(hint);
         toolBar.setBackground(BACKGROUND);
         return toolBar;
     }
@@ -323,19 +321,26 @@ public class SudokuDialog extends JFrame {
     }
 
     private void solve() {
-        Board solveSudoku = historyIterator.getBoard();
-        solveSudoku.setSolved(true);
-        solveSudoku.solveSudoku();
-        boardPanel.repaint();
-
+        if (historyIterator.getBoard().isSolvable()) {
+            historyIterator.setSolved(true);
+            boardPanel.setBoard(historyIterator.getBoard());
+            historyIterator.solveSudoku();
+            boardPanel.repaint();
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "This boars cannot be solved.", "Can It Be Solved?", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void isSolvable() {
-        Board check = historyIterator.getBoard();
-        check.setSolved(true);
-        check.solveSudoku();
-        boardPanel.repaint();
-
+        if (!historyIterator.isSolved()) {
+            Board check = historyIterator.getBoard().cloneBoard();
+            if (check.isSolvable()) {
+                JOptionPane.showMessageDialog(null, "This board can be solved.", "Can It Be Solved?", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "This boars cannot be solved.", "Can It Be Solved?", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
     }
 
     public static void main(String[] args) {

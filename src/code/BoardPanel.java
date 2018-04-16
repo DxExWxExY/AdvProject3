@@ -140,7 +140,7 @@ public class BoardPanel extends JPanel{
         drawNumbers(g);
         insideLines(g);
         outsideBox(g);
-        //solved();
+        solved();
     }
 
     /**
@@ -193,8 +193,6 @@ public class BoardPanel extends JPanel{
      * If so, prompts the user to start a new game or to quit.
      */
     private void solved() {
-
-
         if (board.isSolved() && !board.getSolved()) {
             win = true;
             playSound();

@@ -85,12 +85,10 @@ class  Board implements Cloneable{
                 Board init = this.cloneBoard();
                 while (!init.solveSudoku());
             });
-            System.out.println(f.get(1, TimeUnit.MILLISECONDS));
+            f.get(1, TimeUnit.MILLISECONDS);
         } catch (final TimeoutException e) {
-            System.out.println("NON SOLVABLE");
             reset(this.size);
             generateBoard();
-
         } catch (final Exception e) {
             throw new RuntimeException(e);
         } finally {
@@ -101,7 +99,7 @@ class  Board implements Cloneable{
     /**
      * This method generates a board preset with a given difficulty.
      */
-    void fillBoard() {
+    private void fillBoard() {
         Random rand = new Random();
         int placed = 0;
         int difficulty = (size == 4) ? 4 : 30;
@@ -116,7 +114,25 @@ class  Board implements Cloneable{
                 placed++;
             }
         }
+    }
 
+    boolean isSolvable() {
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        fillBoard();
+        try {
+            final Future<Boolean> f = service.submit(() -> {
+                Board init = this.cloneBoard();
+                return init.solveSudoku();
+            });
+            f.get(1, TimeUnit.MILLISECONDS);
+        } catch (final TimeoutException e) {
+            return false;
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            service.shutdown();
+        }
+        return true;
     }
 
     /**
@@ -124,7 +140,7 @@ class  Board implements Cloneable{
      *
      * @return Determines if the board can be solvable or not.
      */
-    public boolean solveSudoku() {
+    boolean solveSudoku() {
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 if (board[row][col] == 0) {
