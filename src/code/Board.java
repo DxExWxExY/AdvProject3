@@ -12,7 +12,7 @@ class  Board implements Cloneable{
      * Size of this board (number of columns/rows).
      */
     private int size;
-    private boolean solved;
+    private boolean wasSolved;
     private int[][] board;
     private boolean[][] valid;
     private boolean[][] mutable;
@@ -34,7 +34,7 @@ class  Board implements Cloneable{
         this.board = arrayClone(board);
         this.valid = arrayClone(valid);
         this.mutable = arrayClone(mutable);
-        this.solved=false;
+        this.wasSolved = false;
     }
 
     /**
@@ -115,7 +115,6 @@ class  Board implements Cloneable{
 
     boolean isSolvable() {
         ExecutorService service = Executors.newSingleThreadExecutor();
-        fillBoard();
         try {
             final Future<Boolean> f = service.submit(() -> {
                 Board init = this.cloneBoard();
@@ -140,7 +139,7 @@ class  Board implements Cloneable{
     boolean solveSudoku() {
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
-                if (board[row][col] == 0) {
+                if (board[row][col] == 0 && isMutable(row,col)) {
                     for (int number = 1; number <= size; number++) {
                         if (ruleChecker(row, col, number)) {
                             board[row][col] = number;
@@ -157,7 +156,7 @@ class  Board implements Cloneable{
                 }
             }
         }
-     return true;
+        return true;
     }
 
     /**
@@ -170,9 +169,9 @@ class  Board implements Cloneable{
      * @param num This is the number to be compared against the matrix.
      * @return Returns whether the insertion was allowed or not.
      */
-    private boolean ruleChecker(int row, int col, int num) {
+    boolean ruleChecker(int row, int col, int num) {
         return (checkHorizontal(row, num) && checkVertical(col, num)
-                && checkSubGrid(row, col, num) && checkRange(num));
+                && checkSubGrid(row, col, num) && checkRange(num) && isMutable(row,col));
     }
 
     /**
@@ -323,20 +322,11 @@ class  Board implements Cloneable{
 
     }
 
-    void setSolved(boolean solved){
-        this.solved = solved;
+    void setWasSolved(boolean solved){
+        this.wasSolved = solved;
     }
 
-    boolean getSolved(){
-        return this.solved;
-    }
-
-    void print() {
-        for (int[] aBoard : board) {
-            for (int j = 0; j < board.length; j++) {
-                System.out.print(aBoard[j] + " ");
-            }
-            System.out.println();
-        }
+    boolean getWasSolved(){
+        return this.wasSolved;
     }
 }

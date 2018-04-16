@@ -61,6 +61,10 @@ class HistoryNode {
         return board.isValid(sy,sx);
     }
 
+    boolean ruleChecker(int x, int y ,int num) {
+        return board.ruleChecker(x,y,num);
+    }
+
     void reset(int i) {
         board.reset(i);
     }

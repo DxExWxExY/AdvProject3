@@ -69,6 +69,10 @@ public class SudokuDialog extends JFrame {
         boardPanel.sx = x;
         boardPanel.sy = y;
         boardPanel.highlightSqr = true;
+        content.remove(numberButtons);
+        numberButtons = makeNumberButtons();
+        content.add(numberButtons);
+        content.revalidate();
         boardPanel.repaint();
         showMessage(String.format("Board clicked: x = %d, y = %d", x, y));
     }
@@ -259,6 +263,9 @@ public class SudokuDialog extends JFrame {
             button.setFocusPainted(false);
             button.setMargin(new Insets(0, 2, 0, 2));
             button.addActionListener(e -> numberClicked(number));
+            if (!historyIterator.ruleChecker(boardPanel.sy,boardPanel.sx,i) && number != 0) {
+                button.setEnabled(false);
+            }
             numberButtons.add(button);
         }
         numberButtons.setAlignmentX(CENTER_ALIGNMENT);
@@ -323,7 +330,7 @@ public class SudokuDialog extends JFrame {
     private void solve() {
         Board test = historyIterator.getBoard().cloneBoard();
         if (test.isSolvable()) {
-            test.setSolved(true);
+            test.setWasSolved(true);
             createHistory();
             historyIterator.setBoard(test);
             boardPanel.setBoard(historyIterator.getBoard());
